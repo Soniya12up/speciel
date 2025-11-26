@@ -217,7 +217,7 @@
         .heart-beat { animation: beat 1.5s infinite; }
         @keyframes beat {
             0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(236,72,153,0.4)); }
-            50% { transform: scale(1.1); filter: drop-shadow(0 0 25px rgba(236,72,153,0.9)); }
+            50% { transform: scale(1.05); filter: drop-shadow(0 0 25px rgba(236,72,153,0.9)); }
         }
 
         .music-control {
@@ -269,9 +269,17 @@
         <!-- Main Content Area -->
         <main class="w-full max-w-6xl relative min-h-[600px] flex items-center justify-center" style="pointer-events: auto;">
 
-            <!-- STEP 1: Grand Welcome -->
+            <!-- STEP 1: Grand Welcome (Updated with Photo) -->
             <div id="step-1" class="step-container flex-col items-center text-center glass-card p-8 md:p-12 rounded-3xl w-full max-w-3xl">
-                <div class="text-6xl md:text-7xl mb-6 heart-beat">❤️</div>
+                
+                <!-- NEW: Photo Container with Glow & Heartbeat Animation -->
+                <div class="relative w-32 h-32 md:w-40 md:h-40 mx-auto mb-6">
+                    <!-- Glowing blur behind the photo -->
+                    <div class="absolute inset-0 bg-pink-500 rounded-full blur-xl opacity-50 animate-pulse"></div>
+                    <!-- The Photo (Make sure 'intro.jpg' exists in your folder) -->
+                    <img src="New folder (3)/mylove3.jpg" alt="My Love" class="relative w-full h-full object-cover rounded-full border-4 border-white/20 shadow-2xl heart-beat">
+                </div>
+
                 <h1 class="text-3xl md:text-5xl font-bold mb-6 text-gradient leading-tight">Hey my maal,</h1>
                 
                 <div class="space-y-4 text-gray-200 text-sm md:text-base leading-relaxed text-left mb-8 font-light tracking-wide max-h-[55vh] overflow-y-auto pr-2 custom-scroll">
@@ -333,7 +341,7 @@
                     <!-- Photo 1 -->
                     <div class="polaroid-wrapper" data-tilt>
                         <div class="polaroid-card">
-                            <img src="New folder (3)/mylove2.jpg">
+                            <img src="New folder (3)/mylove2.jpg" alt="Memory 1" class="polaroid-img">
                             <div class="text-center"><p class="handwritten">That endless joy</p></div>
                         </div>
                     </div>
@@ -341,7 +349,7 @@
                     <!-- Photo 2 -->
                     <div class="polaroid-wrapper" data-tilt>
                         <div class="polaroid-card">
-                            <img src="New folder (3)/mylove3.jpg">
+                            <img src="New folder (3)/mylove3.jpg" alt="Memory 2" class="polaroid-img">
                             <div class="text-center"><p class="handwritten">The adventures</p></div>
                         </div>
                     </div>
@@ -349,7 +357,7 @@
                     <!-- Photo 3 -->
                     <div class="polaroid-wrapper" data-tilt>
                         <div class="polaroid-card">
-                            <img src="New folder (3)/mylove4.jpg">
+                            <img src="New folder (3)/mylove4.jpg" alt="Memory 3" class="polaroid-img">
                             <div class="text-center"><p class="handwritten">Your radiant light</p></div>
                         </div>
                     </div>
@@ -357,7 +365,7 @@
                     <!-- Photo 4 (Original) -->
                     <div class="polaroid-wrapper" data-tilt>
                         <div class="polaroid-card">
-                            <img src="New folder (3)/mylove1.jpg">
+                            <img src="New folder (3)/mylove1.jpg" alt="Memory 4" class="polaroid-img">
                             <div class="text-center"><p class="handwritten">Our favorite memory ❤️</p></div>
                         </div>
                     </div>
@@ -478,7 +486,7 @@
                     );
 
                     // Staggered content reveal
-                    const children = nextEl.querySelectorAll('h1, h2, h3, p, button, .grid, .text-6xl');
+                    const children = nextEl.querySelectorAll('h1, h2, h3, p, button, .grid, .text-6xl, img');
                     gsap.fromTo(children, 
                         { opacity: 0, y: 20 },
                         { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, delay: 0.2 }
@@ -709,8 +717,4 @@
         });
     </script>
 </body>
-
 </html>
-
-
-
