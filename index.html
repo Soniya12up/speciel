@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For Nayanika ❤️</title>
+    <title>Nayanika | The Muse</title>
     
-    <!-- Fonts -->
+    <!-- Cinematic Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Montserrat:wght@100;200;300;400&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Great+Vibes&family=Lato:wght@300;400&display=swap" rel="stylesheet">
     
     <!-- Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -17,412 +17,520 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'royal': ['Cinzel', 'serif'],
+                        'script': ['Great Vibes', 'cursive'],
+                        'body': ['Lato', 'sans-serif'],
+                    },
+                    colors: {
+                        'deep-void': '#050203',
+                        'rose-gold': '#e11d48',
+                        'pale-gold': '#fce7f3'
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        /* --- CINEMATIC CORE --- */
+        /* --- CORE AESTHETICS --- */
         body {
-            margin: 0; overflow: hidden; background-color: #0a0507; 
-            font-family: 'Montserrat', sans-serif; color: #fce7f3;
+            margin: 0; overflow: hidden; background-color: #050203; 
+            font-family: 'Lato', sans-serif; color: #fce7f3;
             cursor: none; user-select: none;
         }
 
-        /* Film Grain Overlay */
-        .film-grain {
-            position: fixed; inset: 0; pointer-events: none; z-index: 5;
-            opacity: 0.05; background-image: url("https://upload.wikimedia.org/wikipedia/commons/7/76/Noise.png");
-            animation: grain 8s steps(10) infinite;
+        /* Cinematic Overlays */
+        .vignette {
+            position: fixed; inset: 0; pointer-events: none; z-index: 2;
+            background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.8) 100%);
         }
-        @keyframes grain { 0%, 100% { transform: translate(0, 0); } 10% { transform: translate(-5%, -10%); } 90% { transform: translate(-1%, 7%); } }
-
-        /* Ambient Light */
-        .ambient-glow {
-            position: fixed; top: 50%; left: 50%; width: 120vw; height: 120vh;
-            background: radial-gradient(circle, rgba(190, 24, 93, 0.1) 0%, rgba(0,0,0,0) 70%);
-            transform: translate(-50%, -50%); z-index: -1; pointer-events: none;
+        .noise {
+            position: fixed; inset: 0; pointer-events: none; z-index: 3;
+            opacity: 0.04; background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+            filter: contrast(150%) brightness(100%);
         }
 
         /* Custom Cursor */
         #cursor-dot {
-            width: 8px; height: 8px; background: #f9a8d4; border-radius: 50%;
+            width: 6px; height: 6px; background: #fff; border-radius: 50%;
             position: fixed; pointer-events: none; z-index: 9999;
-            box-shadow: 0 0 20px #f472b6; transition: transform 0.1s;
+            box-shadow: 0 0 15px #fff, 0 0 30px #e11d48;
+            transition: transform 0.1s; mix-blend-mode: difference;
         }
-        .sparkle {
-            position: fixed; pointer-events: none; z-index: 9998;
-            background: white; border-radius: 50%; animation: fadeAndScale 1s linear forwards;
+        #cursor-circle {
+            width: 40px; height: 40px; border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 50%; position: fixed; pointer-events: none; z-index: 9998;
+            transition: all 0.2s ease-out;
         }
-        @keyframes fadeAndScale { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(0); opacity: 0; } }
 
-        /* Typography */
-        h1, h2, h3 { font-family: 'Cormorant Garamond', serif; letter-spacing: -0.02em; }
-        .handwritten { font-family: 'Dancing Script', cursive; }
-        .lux-text { font-family: 'Playfair Display', serif; }
-        .breathe-text { animation: breathe 5s ease-in-out infinite; }
-        @keyframes breathe { 0%, 100% { opacity: 0.8; transform: scale(1); } 50% { opacity: 1; transform: scale(1.02); text-shadow: 0 0 20px rgba(255,192,203,0.3); } }
-        
-        /* Glass Panel */
+        /* Glassmorphism Panels */
         .glass-panel {
-            background: rgba(10, 5, 7, 0.3); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
             width: 100%; height: 100vh; position: relative; overflow: hidden;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
 
         .chapter-container {
-            position: absolute; inset: 0; padding: 1.5rem;
+            position: absolute; inset: 0; padding: 2rem;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             opacity: 0; visibility: hidden; text-align: center; z-index: 10;
         }
         .chapter-active { opacity: 1; visibility: visible; z-index: 20; }
 
-        /* --- COMPONENTS --- */
+        /* UI Components */
         .glass-card {
-            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(12px); box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            border-radius: 16px; transition: transform 0.3s;
+            background: rgba(20, 10, 15, 0.4); 
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            border-radius: 12px; transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        .soul-btn {
-            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.2);
-            color: rgba(255,255,255,0.9); padding: 14px 32px; 
-            font-family: 'Montserrat', sans-serif; font-size: 0.7rem; letter-spacing: 3px;
-            text-transform: uppercase; transition: all 0.5s ease;
-            margin-top: 30px; cursor: pointer; border-radius: 50px;
-            position: relative; overflow: hidden; pointer-events: auto; z-index: 50;
+        .majestic-btn {
+            background: transparent; border: 1px solid rgba(255,255,255,0.3);
+            color: white; padding: 16px 40px; 
+            font-family: 'Cinzel', serif; font-size: 0.8rem; letter-spacing: 4px;
+            text-transform: uppercase; transition: all 0.6s ease;
+            margin-top: 40px; cursor: pointer; position: relative; overflow: hidden; 
+            pointer-events: auto; z-index: 50;
         }
-        .soul-btn:hover { background: rgba(255,255,255,0.1); border-color: #fbcfe8; color: #fff; box-shadow: 0 0 30px rgba(244, 114, 182, 0.2); transform: translateY(-2px); }
-
-        /* Funny Grid */
-        .funny-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; width: 100%; max-width: 500px; }
-        .funny-item { 
-            position: relative; aspect-ratio: 1; overflow: hidden; border-radius: 8px; 
-            transform: rotate(var(--rot)); transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 4px solid white; box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-            cursor: pointer;
+        .majestic-btn::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
         }
-        .funny-item:hover { transform: rotate(0deg) scale(1.1); z-index: 50; }
-        .funny-item img { width: 100%; height: 100%; object-fit: cover; }
+        .majestic-btn:hover::before { left: 100%; }
+        .majestic-btn:hover { background: rgba(225, 29, 72, 0.1); border-color: #fda4af; box-shadow: 0 0 40px rgba(225, 29, 72, 0.3); letter-spacing: 6px; }
 
-        /* Floating Words */
-        #floating-words-container { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-        .floating-word { position: absolute; color: rgba(255, 255, 255, 0.06); font-family: 'Dancing Script', cursive; font-weight: 700; pointer-events: none; animation: floatUp linear forwards; }
-        @keyframes floatUp { 0% { transform: translateY(110vh) rotate(0deg); opacity: 0; } 20% { opacity: 0.6; } 100% { transform: translateY(-10vh) rotate(10deg); opacity: 0; } }
+        /* Typography Effects */
+        .gold-text {
+            background: linear-gradient(to bottom, #fff 0%, #fbcfe8 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(255,192,203,0.3);
+        }
+        .breathe { animation: breathe 6s ease-in-out infinite; }
+        @keyframes breathe { 0%, 100% { opacity: 0.7; transform: scale(1); } 50% { opacity: 1; transform: scale(1.05); } }
 
-        /* Scroll */
-        .custom-scroll::-webkit-scrollbar { width: 4px; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #9d174d; border-radius: 10px; }
+        /* Scrollbar & Utilities */
+        .custom-scroll::-webkit-scrollbar { width: 3px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #be123c; border-radius: 10px; }
         
-        .letter-paper { 
-            background: #fff1f2; color: #831843; width: 90%; max-width: 500px; max-height: 60vh; 
-            padding: 2.5rem; border-radius: 2px; overflow-y: auto; text-align: left; 
-            box-shadow: 0 0 50px rgba(0,0,0,0.8); position: relative; z-index: 60; 
-            display: none; flex-direction: column; pointer-events: auto; 
-            font-family: 'Cormorant Garamond', serif; 
+        .polaroid {
+            background: #fff; padding: 12px 12px 30px 12px; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        /* Cake & Flame */
-        .cake-body { width: 180px; height: 100px; background: #fce7f3; border-radius: 10px 10px 0 0; position: relative; display: flex; align-items: center; justify-content: center; cursor: pointer; pointer-events: auto; }
-        .icing { position: absolute; top: 0; left: 0; width: 100%; height: 35px; background: #f472b6; border-radius: 10px 10px 20px 20px; }
-        .candles-container { display: flex; gap: 20px; margin-bottom: -5px; z-index: 10; align-items: flex-end; }
-        .candle { width: 12px; height: 45px; background: #fff; position: relative; cursor: pointer; border-radius: 2px; pointer-events: auto; }
-        .flame { width: 14px; height: 24px; background: #fbbf24; border-radius: 50% 50% 20% 20%; position: absolute; top: -24px; left: -1px; animation: flicker 0.6s infinite alternate; box-shadow: 0 0 20px #f59e0b; transform-origin: center bottom; }
-        .flame.out { animation: none; opacity: 0; transform: scale(0); transition: all 0.3s ease-out; }
-        @keyframes flicker { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.1); opacity: 0.8; } }
+        /* --- NEW GAME CSS (Puzzle) --- */
+        #puzzle-container {
+            width: 300px; height: 400px; /* Adjust for aspect ratio */
+            position: relative;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+        }
+        .puzzle-piece {
+            position: absolute;
+            background-image: url('New folder (3)/mylove1.jpg'); /* Using her photo */
+            background-size: 300px 400px;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 0 15px rgba(225, 29, 72, 0.3);
+            transition: box-shadow 0.3s, border-color 0.3s;
+            pointer-events: auto;
+            z-index: 100;
+        }
+        .puzzle-piece:hover {
+            box-shadow: 0 0 25px rgba(225, 29, 72, 0.8);
+            border-color: #fff;
+            z-index: 101;
+        }
+        .piece-solved {
+            border: none;
+            box-shadow: none;
+            pointer-events: none;
+            z-index: 1;
+        }
 
-        #loader { background: #000; position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px; }
+        /* Cake Styles */
+        .cake-container { position: relative; cursor: pointer; transform: scale(1.5); pointer-events: auto; margin-top: 50px; }
+        .flame {
+            width: 12px; height: 20px; background: #fbbf24; border-radius: 50% 50% 20% 20%;
+            position: absolute; top: -25px; left: 50%; transform: translateX(-50%);
+            box-shadow: 0 0 20px #f59e0b, 0 0 40px #b45309;
+            animation: flicker 0.8s infinite alternate;
+        }
+        .flame.out { animation: none; opacity: 0; transform: translateX(-50%) scale(0); transition: 0.5s; }
+        @keyframes flicker { 0% { opacity: 1; transform: translateX(-50%) scale(1); } 100% { opacity: 0.8; transform: translateX(-50%) scale(1.1); } }
 
     </style>
 </head>
 <body>
 
-    <div class="film-grain"></div>
-    <div class="ambient-glow"></div>
+    <!-- Visual Layers -->
+    <div class="noise"></div>
+    <div class="vignette"></div>
     <div id="cursor-dot"></div>
-    <div id="floating-words-container"></div> 
+    <div id="cursor-circle"></div>
 
+    <!-- Audio -->
     <audio id="bg-music" loop preload="auto"><source src="songs1/love12.mp3" type="audio/mpeg"></audio>
-    <canvas id="bg-canvas" style="position: fixed; top:0; left:0; z-index:-2;"></canvas>
+    <canvas id="bg-canvas" style="position: fixed; top:0; left:0; z-index:-1;"></canvas>
 
     <!-- Loader -->
-    <div id="loader">
-        <div class="text-pink-400 text-4xl animate-pulse">❤</div>
-        <p class="text-pink-200 font-light tracking-[0.4em] text-[10px] uppercase">Gathering Memories...</p>
+    <div id="loader" class="fixed inset-0 bg-black z-[100] flex flex-col items-center justify-center">
+        <div class="w-px h-24 bg-gradient-to-b from-transparent via-pink-500 to-transparent animate-pulse mb-8"></div>
+        <p class="text-white font-royal tracking-[0.5em] text-xs uppercase opacity-80">Calibrating Universe...</p>
     </div>
 
     <!-- Intro -->
     <div id="intro-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black transition-opacity duration-1000 hidden">
-        <p class="text-pink-300 handwritten text-3xl mb-4 opacity-80 breathe-text">For my soulmate,</p>
-        <h1 class="text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-white to-pink-300 mb-8 tracking-tight heartbeat-glow font-serif">Nayanika</h1>
-        <p class="text-gray-500 text-[10px] uppercase tracking-[0.3em] mb-12">Headphones Recommended</p>
-        <button onclick="startJourney()" class="soul-btn">Enter My Heart</button>
+        <p class="text-pink-300 font-script text-4xl mb-6 opacity-80 breathe">My Dearest Soul,</p>
+        <h1 class="text-7xl md:text-9xl font-royal gold-text mb-8 tracking-tighter mix-blend-screen">NAYANIKA</h1>
+        <p class="text-white/40 font-body text-[10px] uppercase tracking-[0.4em] mb-16">Put on your headphones</p>
+        <button onclick="startJourney()" class="majestic-btn">Enter Eternity</button>
     </div>
 
     <!-- Main Stage -->
     <div id="main-stage" class="glass-panel opacity-0 transition-opacity duration-1000 hidden">
 
-        <!-- Progress -->
-        <div class="absolute top-0 left-0 w-full h-1 bg-white/5 z-30">
-            <div id="progress" class="h-full bg-pink-600 w-0 transition-all duration-1000 shadow-[0_0_15px_#db2777]"></div>
+        <!-- Progress Bar -->
+        <div class="absolute top-0 left-0 w-full h-[2px] bg-white/5 z-30">
+            <div id="progress" class="h-full bg-rose-600 w-0 shadow-[0_0_20px_#e11d48] transition-all duration-1000"></div>
         </div>
 
-        <!-- CHAP 1: Intro -->
+        <!-- 1: THE REVELATION -->
         <div id="chap-1" class="chapter-container chapter-active">
-            <div class="w-56 h-56 md:w-72 md:h-72 mb-8 p-3 border border-white/10 rounded-full bg-white/5 backdrop-blur-md shadow-2xl memory-photo relative">
-                <div class="absolute inset-0 rounded-full border border-pink-500/20 animate-pulse"></div>
-                <img src="New folder (3)/mylove1.jpg" class="w-full h-full object-cover rounded-full opacity-90">
+            <div class="relative w-64 h-64 md:w-80 md:h-80 mb-10 rounded-full border border-white/10 p-2 flex items-center justify-center">
+                <div class="absolute inset-0 rounded-full border border-pink-500/20 animate-[spin_10s_linear_infinite]"></div>
+                <div class="w-full h-full rounded-full overflow-hidden relative group">
+                    <img src="New folder (3)/mylove1.jpg" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1000&auto=format&fit=crop'" class="w-full h-full object-cover opacity-90 transition duration-700 group-hover:scale-110 group-hover:opacity-100">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                </div>
             </div>
-            <h2 class="text-4xl md:text-6xl text-white mb-6 italic font-light breathe-text text-center">The Day The World Changed</h2>
-            <div class="emotional-text text-center space-y-4 max-w-lg text-sm md:text-lg font-light text-gray-300">
-                <p>Before you, I didn't realize how loud the world was.</p>
-                <p>Then you walked in...</p>
-                <p class="text-pink-200 italic font-serif text-2xl mt-4">And everything became a melody.</p>
+            <h2 class="text-4xl md:text-6xl font-royal text-white mb-6 leading-tight">The Center of<br><span class="text-pink-400 italic font-script pr-2">My Universe</span></h2>
+            <div class="text-center space-y-4 max-w-lg font-body font-light text-white/70">
+                <p>Before you, time was just a concept.</p>
+                <p>Now, every second without you feels like a wasted eternity.</p>
             </div>
-            <button onclick="nextChapter()" class="soul-btn">Begin Our Story</button>
+            <button onclick="nextChapter()" class="majestic-btn">Our Timeline</button>
         </div>
 
-        <!-- CHAP 2: Timeline -->
+        <!-- 2: THE TIMELINE -->
         <div id="chap-2" class="chapter-container">
-            <h2 class="text-4xl text-pink-100 mb-8 font-serif italic">How Stars Aligned</h2>
-            <div class="relative h-[50vh] w-full max-w-md overflow-y-auto custom-scroll flex flex-col items-center pt-4 pb-20 pointer-events-auto">
-                <div class="absolute left-1/2 transform -translate-x-1/2 w-px h-full bg-gradient-to-b from-transparent via-pink-500/50 to-transparent"></div>
-                <!-- Nodes -->
-                <div class="timeline-node glass-card relative z-10 text-center p-6 m-4 w-64 transform hover:scale-105 transition-all duration-300 cursor-pointer">
-                    <p class="text-[10px] text-pink-400 uppercase tracking-widest mb-2">The Beginning</p>
-                    <p class="text-white font-serif text-lg">Strangers became destiny.</p>
+            <h2 class="text-4xl font-royal text-pink-100 mb-12 border-b border-white/10 pb-4">Written In The Stars</h2>
+            
+            <div class="relative w-full max-w-md h-[50vh] overflow-y-auto custom-scroll px-4 pointer-events-auto">
+                <div class="absolute left-[20px] top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-pink-700 to-transparent"></div>
+                
+                <!-- Event 1: Birthday -->
+                <div class="ml-10 mb-10 relative group">
+                    <div class="absolute -left-[45px] top-2 w-3 h-3 bg-pink-500 rounded-full shadow-[0_0_10px_#ec4899]"></div>
+                    <span class="text-xs font-royal text-pink-400 tracking-widest">24 JANUARY 2008</span>
+                    <h3 class="text-xl text-white mt-1 font-royal">A Star Was Born</h3>
+                    <p class="text-sm text-gray-400 mt-2 font-body font-light">The day the world became a little brighter. My destiny began here, even if I didn't know it yet.</p>
                 </div>
-                <div class="timeline-node glass-card relative z-10 text-center p-6 m-4 w-64 transform hover:scale-105 transition-all duration-300 cursor-pointer">
-                    <p class="text-[10px] text-pink-400 uppercase tracking-widest mb-2">24 May</p>
-                    <p class="text-white font-serif text-lg italic">"The day you stayed."</p>
+
+                <!-- Event 2: Meeting -->
+                <div class="ml-10 mb-10 relative group">
+                    <div class="absolute -left-[45px] top-2 w-3 h-3 bg-white border border-pink-500 rounded-full"></div>
+                    <span class="text-xs font-royal text-pink-400 tracking-widest">24 MAY</span>
+                    <h3 class="text-xl text-white mt-1 font-royal">"The Day You Stayed"</h3>
+                    <p class="text-sm text-gray-400 mt-2 font-body font-light">Two souls, wandering the same earth, finally found their home in each other.</p>
                 </div>
-                <div class="timeline-node glass-card relative z-10 text-center p-6 m-4 w-64 transform hover:scale-105 transition-all duration-300 cursor-pointer">
-                    <p class="text-[10px] text-pink-400 uppercase tracking-widest mb-2">Today</p>
-                    <p class="text-white font-serif text-lg">Celebrating You.</p>
+
+                <!-- Event 3: Present -->
+                <div class="ml-10 relative group">
+                    <div class="absolute -left-[45px] top-2 w-3 h-3 bg-white border border-pink-500 rounded-full"></div>
+                    <span class="text-xs font-royal text-pink-400 tracking-widest">TODAY</span>
+                    <h3 class="text-xl text-white mt-1 font-royal">Celebrating Nayanika</h3>
+                    <p class="text-sm text-gray-400 mt-2 font-body font-light">Celebrating 17 years of your existence, and every moment I get to call you mine.</p>
                 </div>
             </div>
-            <button onclick="nextChapter()" class="soul-btn">Continue</button>
+            <button onclick="nextChapter()" class="majestic-btn">View Memories</button>
         </div>
 
-        <!-- CHAP 3: Memories Gallery -->
+        <!-- 3: ELEGANT GALLERY -->
         <div id="chap-3" class="chapter-container">
-            <h2 class="text-3xl text-pink-100 mb-4 font-serif">Moments I Replay</h2>
-            <div id="gallery-stage" class="relative w-full h-[45vh] flex justify-center items-center perspective-[1000px]"></div>
-            <p id="gallery-caption" class="breathe-text px-4 text-center min-h-[60px] text-xl font-serif italic text-pink-200"></p>
-            <button id="gallery-btn" onclick="revealNextMemory()" class="soul-btn">Next Memory</button>
+            <h2 class="text-3xl font-royal text-white mb-2">Fragments of Beauty</h2>
+            <p class="font-script text-pink-300 text-2xl mb-8">"You are art I never tire of admiring"</p>
+            
+            <div id="gallery-stage" class="relative w-full h-[45vh] flex justify-center items-center perspective-[1000px]">
+                <!-- Images injected via JS -->
+            </div>
+            
+            <div class="h-24 flex items-center justify-center mt-4 px-4">
+                <p id="gallery-caption" class="text-white/80 font-body font-light italic tracking-wide text-center text-lg"></p>
+            </div>
+            <button id="gallery-btn" onclick="revealNextMemory()" class="majestic-btn">Reveal Next</button>
         </div>
 
-        <!-- CHAP 4: FUNNY PHOTOS (NEW) -->
+        <!-- 4: THE GIGGLES -->
         <div id="chap-4" class="chapter-container">
-            <h2 class="text-4xl text-pink-200 mb-2 font-serif">The Giggle Gallery</h2>
-            <p class="text-xs text-gray-400 mb-8 tracking-widest uppercase">Because your smile is my favorite</p>
-            <div class="funny-grid pointer-events-auto">
-                <div class="funny-item" style="--rot: -5deg"><img src="New folder (3)/funny1.jpg"></div>
-                <div class="funny-item" style="--rot: 8deg"><img src="New folder (3)/funny2.jpg"></div>
-                <div class="funny-item" style="--rot: -3deg"><img src="New folder (3)/funny3.jpg"></div>
-                <div class="funny-item" style="--rot: 6deg"><img src="New folder (3)/funny4.jpg"></div>
+            <h2 class="text-4xl font-royal text-white mb-4">Your Joy is My Fuel</h2>
+            <div class="grid grid-cols-2 gap-4 w-full max-w-lg pointer-events-auto p-4">
+                <div class="relative aspect-square overflow-hidden rounded-lg border border-white/20 hover:scale-105 transition duration-500">
+                     <img src="New folder (3)/funny1.jpg" onerror="this.src='https://images.unsplash.com/photo-1543269664-56d93c1b41a6?q=80&w=400&auto=format&fit=crop'" class="w-full h-full object-cover">
+                </div>
+                <div class="relative aspect-square overflow-hidden rounded-lg border border-white/20 hover:scale-105 transition duration-500 mt-8">
+                     <img src="New folder (3)/funny2.jpg" onerror="this.src='https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=400&auto=format&fit=crop'" class="w-full h-full object-cover">
+                </div>
+                <div class="relative aspect-square overflow-hidden rounded-lg border border-white/20 hover:scale-105 transition duration-500 -mt-8">
+                     <img src="New folder (3)/funny3.jpg" onerror="this.src='https://images.unsplash.com/photo-1517487881594-2787fef5ebf7?q=80&w=400&auto=format&fit=crop'" class="w-full h-full object-cover">
+                </div>
+                <div class="relative aspect-square overflow-hidden rounded-lg border border-white/20 hover:scale-105 transition duration-500">
+                     <img src="New folder (3)/funny4.jpg" onerror="this.src='https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?q=80&w=400&auto=format&fit=crop'" class="w-full h-full object-cover">
+                </div>
             </div>
-            <button onclick="nextChapter()" class="soul-btn mt-8">Enough Giggles!</button>
+            <button onclick="nextChapter()" class="majestic-btn">Deeper...</button>
         </div>
 
-        <!-- CHAP 5: Hidden Letters -->
+        <!-- 5: WHY YOU -->
         <div id="chap-5" class="chapter-container">
-            <h2 class="text-4xl text-white mb-8 font-serif">Things I Never Told You</h2>
-            <div class="secret-grid grid grid-cols-2 gap-4 w-full max-w-lg pointer-events-auto">
-                <div class="secret-note glass-card p-6 cursor-pointer group relative overflow-hidden" onclick="revealSecret(this)">
-                    <div class="absolute inset-0 bg-pink-900/20 group-hover:bg-pink-900/30 transition"></div>
-                    <p class="text-pink-200 font-serif italic text-center blur-sm group-hover:blur-none transition-all duration-700">"When you're sad, my heart breaks."</p>
-                    <span class="absolute bottom-2 left-1/2 -translate-x-1/2 text-[9px] uppercase tracking-widest text-white/50 note-hint">Touch</span>
-                </div>
-                <div class="secret-note glass-card p-6 cursor-pointer group relative overflow-hidden" onclick="revealSecret(this)">
-                    <div class="absolute inset-0 bg-pink-900/20 group-hover:bg-pink-900/30 transition"></div>
-                    <p class="text-pink-200 font-serif italic text-center blur-sm group-hover:blur-none transition-all duration-700">"Your voice is my favorite sound."</p>
-                    <span class="absolute bottom-2 left-1/2 -translate-x-1/2 text-[9px] uppercase tracking-widest text-white/50 note-hint">Touch</span>
-                </div>
+            <div class="absolute inset-0 flex items-center justify-center opacity-20 pointer-events-none">
+                <h1 class="text-[20vw] font-royal text-white/5 select-none">LOVE</h1>
             </div>
-            <button onclick="nextChapter()" class="soul-btn mt-8">Go Deeper</button>
+            <h2 class="text-4xl font-royal text-white mb-8">Why I Choose You</h2>
+            <div class="text-center space-y-8 font-body text-lg text-white/80 max-w-xl leading-relaxed">
+                <p class="reveal-text">Because you are kind in a cruel world.</p>
+                <p class="reveal-text">Because your voice calms the storms in my head.</p>
+                <p class="reveal-text">Because with you, I am finally <span class="text-pink-400 font-script text-3xl">Home</span>.</p>
+                <p class="reveal-text">Because you are Nayanika.</p>
+            </div>
+            <button onclick="nextChapter()" class="majestic-btn mt-8">The Puzzle of Us</button>
         </div>
 
-        <!-- CHAP 6: Infinite Reasons -->
+        <!-- 6: THE PUZZLE GAME (NEW & EMOTIONAL) -->
         <div id="chap-6" class="chapter-container">
-            <h2 class="text-3xl text-pink-100 mb-4 font-serif">Why It's You</h2>
-            <div class="h-[40vh] w-full relative flex flex-col items-center justify-center mask-image-gradient">
-                <div class="text-center space-y-6 animate-scroll-up">
-                    <p class="text-xl text-white/60 font-light">Your Kindness</p>
-                    <p class="text-3xl text-pink-300 font-serif italic">Your Laugh</p>
-                    <p class="text-xl text-white/60 font-light">The way you look at me</p>
-                    <p class="text-3xl text-pink-300 font-serif italic">Your Voice at 11 PM</p>
-                    <p class="text-xl text-white/60 font-light">Just being You</p>
+            <h2 class="text-3xl font-royal text-white mb-2">Piece by Piece...</h2>
+            <p id="puzzle-instruction" class="text-xs text-rose-300 tracking-[0.3em] uppercase mb-8 animate-pulse">Click the floating shards to make me whole</p>
+            
+            <div class="relative">
+                <!-- Solved Image Container (Hidden initially) -->
+                <div id="puzzle-container">
+                    <!-- Pieces will be injected here -->
                 </div>
             </div>
-            <button onclick="nextChapter()" class="soul-btn">My Heart</button>
+
+            <p id="puzzle-msg" class="h-8 mt-6 font-script text-2xl text-pink-200 transition-opacity duration-500 opacity-0"></p>
+            
+            <button id="game-next-btn" onclick="nextChapter()" class="majestic-btn opacity-0 pointer-events-none mt-4">Open Letter</button>
         </div>
 
-        <!-- CHAP 7: Love Letter -->
+        <!-- 7: THE LETTER -->
         <div id="chap-7" class="chapter-container">
-            <div id="letter-closed" class="envelope-container flex flex-col items-center" onclick="openLetter()">
-                <div class="w-72 h-48 bg-[#9d174d] rounded-lg shadow-2xl flex items-center justify-center relative border-t-2 border-white/10">
-                    <div class="wax-seal absolute"><span class="text-2xl">❤</span></div>
-                    <div class="absolute -top-10 text-white font-serif italic text-2xl">For Nayanika</div>
+            <div id="letter-closed" class="cursor-pointer group perspective-[1000px]" onclick="openLetter()">
+                <div class="w-80 h-52 bg-[#1a050a] border border-[#e11d48] rounded-md shadow-[0_0_30px_rgba(225,29,72,0.2)] flex items-center justify-center relative transition transform group-hover:rotate-x-12">
+                    <div class="absolute w-12 h-12 bg-rose-700 rounded-full flex items-center justify-center shadow-lg border border-white/20 text-xl">❦</div>
+                    <p class="absolute bottom-6 font-royal text-[10px] tracking-[0.4em] text-rose-300">CLICK TO OPEN</p>
                 </div>
-                <p class="text-[10px] text-white/50 mt-6 uppercase tracking-[0.3em] animate-pulse">Touch to Open</p>
             </div>
-            <div id="letter-content" class="letter-paper custom-scroll">
-                <p class="text-xl font-serif italic leading-relaxed text-gray-800">
-                    My Dearest Nayanika, <br><br>
-                    I write this because sometimes spoken words vanish into the air, but written ones stay.<br><br>
-                    "Nayanika" isn't just a name. To me, it means <b>Home</b>. It means <b>Peace</b>. <br><br>
+
+            <div id="letter-content" class="hidden flex-col bg-[#fff1f2] text-rose-950 w-full max-w-lg h-[60vh] p-8 rounded-sm shadow-2xl overflow-y-auto custom-scroll text-left relative pointer-events-auto">
+                <p class="font-royal text-xs tracking-widest text-center mb-6 uppercase border-b border-rose-900/10 pb-4">January 24th, 2025</p>
+                
+                <p class="font-royal text-xl mb-4">My Dearest Nayanika,</p>
+                
+                <p class="font-body leading-loose text-sm md:text-base mb-4">
+                    As I write this, I am thinking about the day you were born—<b>January 24, 2008</b>. The stars must have danced that day, knowing that a soul as beautiful as yours was entering the world.<br><br>
+                    
+                    "Nayanika" isn't just a name. To me, it means <b>Home</b>. It means <b>Peace</b>.<br><br>
+                    
                     Thank you for the 24th of May. Thank you for choosing me every single day. Even when I am difficult, you are patient. Even when the world is loud, you are my quiet.<br><br>
-                    I love you more than this code can ever express.<br><br>
-                    Forever yours,<br>
-                    <b>(Your Name)</b>
+                    
+                    I love you, infinitely.
                 </p>
-                <div class="w-full flex justify-center mt-8">
-                    <button onclick="nextChapter()" class="px-8 py-3 rounded-full border border-pink-900 text-pink-900 uppercase text-xs tracking-widest hover:bg-pink-900 hover:text-white transition duration-500">My Promises</button>
+
+                <p class="font-script text-3xl text-right mt-8 text-rose-800">Yours Forever,<br> (Your Name)</p>
+                
+                <div class="text-center mt-12">
+                    <button onclick="nextChapter()" class="border border-rose-900 text-rose-900 px-6 py-2 text-xs font-royal uppercase hover:bg-rose-900 hover:text-white transition">My Promises</button>
                 </div>
             </div>
         </div>
 
-        <!-- CHAP 8: PROMISES -->
+        <!-- 8: PROMISES -->
         <div id="chap-8" class="chapter-container">
-            <h2 class="text-3xl md:text-5xl text-pink-100 mb-6 font-serif italic">My Promises to You</h2>
+            <h2 class="text-3xl font-royal text-pink-100 mb-8">My Sacred Vows</h2>
             
-            <div id="promise-card" class="relative w-full max-w-sm aspect-[4/5] bg-black/20 rounded-xl border border-white/10 overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)]">
-                <div id="promise-flash" class="absolute inset-0 bg-white opacity-0 pointer-events-none z-20"></div>
-                <img id="promise-img" src="" class="absolute inset-0 w-full h-full object-cover opacity-80 transition-transform duration-[10s] ease-linear scale-100">
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90"></div>
-                <div class="absolute bottom-0 p-8 text-center w-full z-10">
-                    <p id="promise-text" class="text-white text-xl font-serif italic mb-3 leading-snug drop-shadow-md translate-y-4 opacity-0"></p>
-                    <p id="promise-sub" class="text-pink-200/80 text-xs font-sans tracking-wide leading-relaxed translate-y-4 opacity-0"></p>
+            <div id="promise-card" class="relative w-72 h-96 bg-black/40 border border-white/10 rounded-xl overflow-hidden flex flex-col justify-end p-6 shadow-2xl backdrop-blur-sm">
+                <!-- Image Background -->
+                <img id="promise-img" src="" class="absolute inset-0 w-full h-full object-cover opacity-60 transition duration-1000">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+                
+                <div class="relative z-10 translate-y-4 opacity-0 transition-all duration-700" id="promise-text-container">
+                    <h3 id="promise-title" class="text-xl font-royal text-white mb-2 leading-tight"></h3>
+                    <p id="promise-desc" class="text-xs font-body text-gray-300 leading-relaxed"></p>
                 </div>
             </div>
-            
-            <p id="promise-counter" class="text-[10px] text-white/30 mt-6 tracking-[0.3em]">1 / 18</p>
-            <button id="btn-promise-next" onclick="nextPromise()" class="soul-btn mt-2">Next Promise</button>
+
+            <p id="promise-count" class="text-white/30 text-[10px] tracking-[0.3em] mt-8">1 / 18</p>
+            <button id="promise-next-btn" onclick="nextPromise()" class="majestic-btn mt-4">Next Promise</button>
         </div>
 
-        <!-- CHAP 9: EXTRA SURPRISE (NEW) -->
+        <!-- 9: SURPRISE -->
         <div id="chap-9" class="chapter-container">
-            <h2 class="text-4xl text-white mb-6 font-serif">A Little Surprise</h2>
-            <div id="surprise-box" class="w-48 h-48 bg-pink-900/30 border border-pink-500/50 rounded-lg flex items-center justify-center cursor-pointer shadow-[0_0_50px_rgba(236,72,153,0.3)] hover:scale-105 transition duration-500 pointer-events-auto relative group" onclick="openSurprise()">
-                <div class="absolute inset-0 bg-pink-600/20 blur-xl opacity-0 group-hover:opacity-100 transition duration-700"></div>
-                <span class="text-5xl group-hover:scale-110 transition duration-300">🎁</span>
-            </div>
+            <h2 class="text-4xl font-royal text-white mb-8">One Last Secret</h2>
             
-            <!-- Hidden Content Container -->
-            <div id="surprise-content" class="hidden flex-col items-center max-w-md text-center bg-black/80 p-6 rounded-xl border border-pink-500/30 backdrop-blur-xl">
-                <img src="New folder (3)/surprise_box.jpg" class="w-full h-48 object-cover rounded-lg mb-4 border border-white/20">
-                <p class="text-pink-200 font-serif italic text-lg">"Just like this box, my heart is full of surprises for you. I kept this photo just for today."</p>
-                <button onclick="nextChapter()" class="soul-btn mt-4">Continue</button>
+            <div id="gift-box" onclick="openGift()" class="w-40 h-40 bg-gradient-to-br from-rose-900 to-black border border-rose-500/50 flex items-center justify-center text-6xl cursor-pointer shadow-[0_0_60px_rgba(225,29,72,0.4)] hover:scale-110 transition duration-500 pointer-events-auto rounded-lg">
+                🎁
+            </div>
+
+            <div id="gift-content" class="hidden flex-col items-center max-w-md bg-black/80 backdrop-blur-xl border border-rose-500/30 p-6 rounded-xl transform scale-90 opacity-0 transition duration-700">
+                <img src="New folder (3)/surprise_box.jpg" onerror="this.src='https://images.unsplash.com/photo-1513201099705-a9746e1e201f?q=80&w=400&auto=format&fit=crop'" class="w-full h-56 object-cover rounded-md mb-4 border border-white/10">
+                <p class="font-script text-2xl text-rose-300 mb-2">"Just for you..."</p>
+                <p class="text-white/80 font-body text-sm mb-6">My heart is full of surprises, but you are the greatest gift I've ever received.</p>
+                <button onclick="nextChapter()" class="majestic-btn">The Finale</button>
             </div>
         </div>
 
-        <!-- CHAP 10: Future Vow -->
+        <!-- 10: CAKE & WISH -->
         <div id="chap-10" class="chapter-container">
-            <div class="max-w-xl text-center px-4">
-                <h1 class="text-5xl md:text-7xl text-white mb-8 font-serif leading-tight">"A Future With You."</h1>
-                <p class="text-pink-200/80 text-lg font-light">I see us growing up. I see us growing old.</p>
-                <p class="text-white/60 text-sm mt-4 tracking-widest uppercase">In every lifetime, I will find you.</p>
+            <h2 class="text-5xl font-royal gold-text mb-2">Happy 17th Birthday</h2>
+            <p id="wish-instruction" class="text-[10px] tracking-[0.4em] text-pink-400 uppercase mb-12 animate-pulse">Close your eyes & Make a wish</p>
+            
+            <div class="cake-container">
+                <!-- Candles -->
+                <div class="flex gap-4 justify-center absolute -top-10 w-full z-10">
+                    <div class="w-2 h-12 bg-white rounded relative cursor-pointer" onclick="blowCandle(this)"><div class="flame"></div></div>
+                    <div class="w-2 h-12 bg-white rounded relative cursor-pointer" onclick="blowCandle(this)"><div class="flame"></div></div>
+                    <div class="w-2 h-12 bg-white rounded relative cursor-pointer" onclick="blowCandle(this)"><div class="flame"></div></div>
+                </div>
+                <!-- Cake Base -->
+                <div class="w-48 h-24 bg-gradient-to-b from-rose-200 to-rose-300 rounded-t-lg relative flex items-center justify-center border-t-4 border-white shadow-2xl" onclick="checkCake()">
+                    <div class="absolute top-0 left-0 w-full h-6 bg-white/50 blur-sm rounded-[50%]"></div>
+                    <span class="text-4xl">🎂</span>
+                </div>
             </div>
-            <button onclick="nextChapter()" class="soul-btn mt-12">Make a Wish</button>
         </div>
 
-        <!-- CHAP 11: Cake -->
+        <!-- 11: FINALE -->
         <div id="chap-11" class="chapter-container">
-            <h2 class="text-4xl text-white mb-2 handwritten">Happy Birthday, Sunu</h2>
-            <p id="cake-instruction" class="text-[10px] tracking-[0.3em] text-pink-400 uppercase mb-12 animate-pulse">Make a wish & Blow the candles</p>
-            <div id="cake-section" class="flex flex-col items-center relative scale-125">
-                <div class="candles-container">
-                    <div class="candle" onclick="blowCandle(this)"><div class="flame"></div></div>
-                    <div class="candle" onclick="blowCandle(this)"><div class="flame"></div></div>
-                    <div class="candle" onclick="blowCandle(this)"><div class="flame"></div></div>
-                </div>
-                <div class="cake-body" onclick="cutCake()">
-                    <div class="icing"></div>
-                    <span class="text-pink-900/10 text-4xl font-bold select-none z-10">🎂</span>
-                </div>
+            <div class="relative group cursor-pointer mb-8">
+                <div class="absolute -inset-4 bg-rose-600/30 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition duration-1000"></div>
+                <img src="New folder (3)/surprise.jpg" onerror="this.src='https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?q=80&w=600&auto=format&fit=crop'" id="final-img" class="relative w-80 rounded-lg border border-white/10 shadow-2xl transform scale-90 opacity-0">
             </div>
-        </div>
-
-        <!-- CHAP 12: Finale -->
-        <div id="chap-12" class="chapter-container">
-            <div class="relative group cursor-pointer perspective-[1000px] mb-8">
-                <div class="absolute -inset-10 bg-pink-600/20 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition duration-1000"></div>
-                <img src="New folder (3)/surprise.jpg" id="final-img" class="relative w-72 md:w-96 rounded-lg border border-white/10 shadow-2xl transform scale-90 opacity-0 rotate-1">
-            </div>
-            <div class="h-32 w-full flex items-center justify-center px-4">
-                <h1 id="typewriter" class="text-2xl md:text-4xl text-pink-100 font-serif italic text-center leading-relaxed"></h1>
-            </div>
-            <p class="text-white/40 text-[10px] mt-12 tracking-widest uppercase">Forever Yours.</p>
+            <h1 id="typewriter" class="text-2xl md:text-4xl text-white font-royal text-center leading-relaxed h-20"></h1>
+            <p class="text-white/30 text-[10px] mt-12 tracking-widest uppercase font-royal">Forever Yours.</p>
         </div>
 
     </div>
 
     <!-- Controls -->
-    <div onclick="toggleMusic()" class="fixed bottom-8 right-8 text-white/50 hover:text-white cursor-pointer z-50 transition p-3 bg-black/40 rounded-full backdrop-blur-md border border-white/10">
-        <span id="music-status" class="text-xs uppercase tracking-widest">🔇 Music</span>
+    <div onclick="toggleMusic()" class="fixed bottom-8 right-8 text-white/40 hover:text-white cursor-pointer z-50 transition p-4 bg-black/20 rounded-full border border-white/5 hover:border-rose-500/50 backdrop-blur-md">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M11.536 14.01A8.473 8.473 0 0 1 8 10a8.473 8.473 0 0 1 3.536-4.01C12.446 5.483 13 4.81 13 4v6c0 .81-.554 1.483-1.464 1.99z"/>
+            <path d="M7.34 1.635a2.69 2.69 0 0 1 3.296 1.033 9.4 9.4 0 0 0-3.322 3.252 2.69 2.69 0 0 1-2.029-4.223 2.69 2.69 0 0 1 2.055-.062z"/>
+            <path d="M2.5 5a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm0 7a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm6.29 4.35a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm6.29-4.35a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1z"/>
+        </svg>
     </div>
 
     <script>
-        // --- SETUP ---
+        // --- 1. SETUP & MOUSE TRACKING ---
         gsap.registerPlugin(TextPlugin);
         const cursorDot = document.getElementById("cursor-dot");
+        const cursorCircle = document.getElementById("cursor-circle");
+        
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+
         document.addEventListener("mousemove", (e) => {
+            mouseX = e.clientX; mouseY = e.clientY;
             cursorDot.style.left = e.clientX + "px"; cursorDot.style.top = e.clientY + "px";
-            if(Math.random() > 0.95) createSparkle(e.clientX, e.clientY);
         });
-        function createSparkle(x, y) {
-            const s = document.createElement("div"); s.classList.add("sparkle"); document.body.appendChild(s);
-            const size = Math.random() * 3 + 1; s.style.width = `${size}px`; s.style.height = `${size}px`;
-            s.style.left = `${x}px`; s.style.top = `${y}px`;
-            setTimeout(() => { s.remove(); }, 1000);
+
+        // Smooth Cursor Follow
+        function animateCursor() {
+            let distX = mouseX - cursorX; let distY = mouseY - cursorY;
+            cursorX = cursorX + (distX * 0.1); cursorY = cursorY + (distY * 0.1);
+            cursorCircle.style.left = (cursorX - 20) + "px"; cursorCircle.style.top = (cursorY - 20) + "px";
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // --- 2. THREE.JS BACKGROUND (Star Tunnel) ---
+        function initThree() {
+            const canvas = document.getElementById('bg-canvas');
+            const scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x050203, 0.002); 
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+            camera.position.z = 1000;
+
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+
+            const geometry = new THREE.BufferGeometry();
+            const count = 2000;
+            const positions = [];
+            const colors = [];
+            const colorObj = new THREE.Color();
+
+            for(let i=0; i<count; i++) {
+                const x = (Math.random() - 0.5) * 2000;
+                const y = (Math.random() - 0.5) * 2000;
+                const z = (Math.random() - 0.5) * 2000;
+                positions.push(x, y, z);
+                if(Math.random() > 0.5) colorObj.setHex(0xe11d48); 
+                else colorObj.setHex(0xffffff);
+                colors.push(colorObj.r, colorObj.g, colorObj.b);
+            }
+
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+            geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+
+            const material = new THREE.PointsMaterial({ size: 2, vertexColors: true, transparent: true, opacity: 0.8 });
+            const starField = new THREE.Points(geometry, material);
+            scene.add(starField);
+
+            function animate() {
+                requestAnimationFrame(animate);
+                starField.rotation.x += 0.0005;
+                starField.rotation.y += 0.0005;
+                camera.position.x += (mouseX - window.innerWidth/2) * 0.00005;
+                camera.position.y += (mouseY - window.innerHeight/2) * 0.00005;
+                renderer.render(scene, camera);
+            }
+            animate();
+            window.addEventListener('resize', () => { camera.aspect = window.innerWidth/window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
         }
 
-        // --- FLOATING WORDS ---
-        const loveWords = ["Sunu", "Love", "Forever", "24 May", "Nayanika", "Peace", "Home", "Mine", "Heart", "Soul", "Infinity", "Us", "Magic"];
-        function createWord(isInitial = false) {
-            const container = document.getElementById('floating-words-container');
-            const word = document.createElement('div');
-            word.innerText = loveWords[Math.floor(Math.random() * loveWords.length)];
-            word.className = "floating-word";
-            word.style.left = Math.random() * 100 + "vw";
-            word.style.fontSize = (Math.random() * 2 + 1) + "rem";
-            const duration = Math.random() * 15 + 20;
-            word.style.animationDuration = duration + "s";
-            if(isInitial) word.style.animationDelay = -(Math.random() * duration) + "s";
-            container.appendChild(word);
-            setTimeout(() => { word.remove(); }, duration * 1000);
-        }
-        for(let i=0; i<20; i++) createWord(true);
-        setInterval(() => createWord(false), 1500);
-
-        // --- AUDIO ---
+        // --- 3. AUDIO SYSTEM ---
         const audio = document.getElementById('bg-music');
         let musicPlaying = false;
         function toggleMusic() {
-            const status = document.getElementById("music-status");
-            if(musicPlaying) { audio.pause(); status.innerText = "🔇 Music"; } 
-            else { audio.play().then(() => { status.innerText = "🔊 Playing"; }).catch(e => { alert("Touch screen first!"); }); }
+            if(musicPlaying) { 
+                gsap.to(audio, { volume: 0, duration: 1, onComplete: () => audio.pause() });
+            } else { 
+                audio.volume = 0; audio.play();
+                gsap.to(audio, { volume: 0.5, duration: 2 });
+            }
             musicPlaying = !musicPlaying;
         }
 
-        // --- NAVIGATION STATE ---
+        // --- 4. NAVIGATION SYSTEM ---
         let currentChap = 1;
-        const totalChap = 12; 
+        const totalChap = 11;
         
-        // --- LOAD SEQUENCE ---
         window.onload = () => {
+            initThree();
             gsap.to("#loader", { opacity: 0, duration: 1.5, delay: 1, onComplete: () => {
                 document.getElementById("loader").style.display = "none";
                 document.getElementById("intro-screen").classList.remove("hidden");
-                initParticles();
             }});
         };
 
         function startJourney() {
-            gsap.to("#intro-screen", { opacity: 0, duration: 2, onComplete: () => {
+            gsap.to("#intro-screen", { opacity: 0, duration: 2, pointerEvents: "none", onComplete: () => {
                 document.getElementById("intro-screen").style.display = "none";
                 document.getElementById("main-stage").classList.remove("hidden");
                 gsap.to("#main-stage", { opacity: 1, duration: 2 });
-                audio.volume = 0.6; audio.play().catch(()=>{});
-                musicPlaying = true; document.getElementById("music-status").innerText = "🔊 Playing";
-                animateElements(1);
+                if(!musicPlaying) toggleMusic();
+                playChapterAnim(1);
             }});
         }
 
@@ -433,215 +541,245 @@
             if(curr) curr.style.pointerEvents = "none";
 
             gsap.to("#progress", { width: `${(currentChap/totalChap)*100}%`, duration: 1.5, ease: "power2.inOut" });
-            gsap.to(curr, { opacity: 0, y: -30, filter: "blur(10px)", duration: 1, ease: "power2.in", onComplete: () => {
+
+            gsap.to(curr, { opacity: 0, scale: 0.95, filter: "blur(10px)", duration: 1.2, ease: "power2.in", onComplete: () => {
                 curr.classList.remove("chapter-active");
                 if(next) {
                     next.classList.add("chapter-active");
-                    next.style.pointerEvents = "auto"; 
-                    gsap.fromTo(next, { opacity: 0, y: 40, filter: "blur(10px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 1.2, ease: "power2.out" });
+                    gsap.fromTo(next, 
+                        { opacity: 0, scale: 1.05, filter: "blur(10px)" }, 
+                        { opacity: 1, scale: 1, filter: "blur(0px)", duration: 1.5, ease: "power2.out" }
+                    );
+                    next.style.pointerEvents = "auto";
                     
                     currentChap++;
-                    animateElements(currentChap);
-                    
-                    // Specific Logic
-                    if(currentChap === 3 && mIdx === 0) revealNextMemory();
-                    if(currentChap === 8) loadPromise(0);
-                    if(currentChap === 12) revealFinale();
+                    playChapterAnim(currentChap);
                 }
             }});
         }
 
-        function animateElements(id) {
-            let fadeDur = 1.5; let stag = 0.2; let delay = 1.5;
-            if (id === 1) { fadeDur = 4; stag = 0.8; delay = 5; } // Slow Intro
-            
-            gsap.fromTo(`#chap-${id} h2, #chap-${id} h1, #chap-${id} .memory-photo`, 
-                { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: fadeDur, ease: "power3.out" });
-            
-            gsap.fromTo(`#chap-${id} p, #chap-${id} .emotional-text`, 
-                { opacity: 0 }, { opacity: 1, duration: fadeDur, delay: 0.5, stagger: stag });
+        function playChapterAnim(id) {
+            gsap.fromTo(`#chap-${id} h2, #chap-${id} h3, #chap-${id} p`, 
+                { y: 30, opacity: 0 }, 
+                { y: 0, opacity: 1, duration: 1.5, stagger: 0.2, ease: "power3.out", delay: 0.5 }
+            );
 
-            gsap.fromTo(`#chap-${id} .soul-btn`, 
-                { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 1, delay: delay, ease: "back.out(1.7)" });
-            
-            if(id === 2) gsap.fromTo(".timeline-node", {opacity: 0, x: -30}, {opacity: 1, x: 0, duration: 1, stagger: 0.4, delay: 0.5});
+            gsap.fromTo(`#chap-${id} .majestic-btn`, 
+                { width: 0, opacity: 0 }, 
+                { width: "auto", opacity: 1, duration: 1, delay: 2, ease: "power2.out" }
+            );
+
+            if(id === 3) loadGallery();
+            if(id === 6) initPuzzleGame(); // GAME
+            if(id === 8) loadPromise(0);
+            if(id === 11) triggerFinale();
         }
 
-        // --- INTERACTIONS ---
-        function revealSecret(el) { el.classList.add("secret-revealed"); el.querySelector(".note-hint").style.display = "none"; }
+        // --- 5. INTERACTION FUNCTIONS ---
         
-        function openLetter() {
-            gsap.to("#letter-closed", { scale: 1.5, opacity: 0, duration: 0.8, onComplete: () => {
-                document.getElementById("letter-closed").style.display = "none";
-                const content = document.getElementById("letter-content");
-                content.style.display = "flex";
-                gsap.fromTo(content, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1 });
-            }});
-        }
-
-        function openSurprise() {
-            gsap.to("#surprise-box", { scale: 1.5, opacity: 0, duration: 0.5, onComplete: () => {
-                document.getElementById("surprise-box").style.display = "none";
-                const content = document.getElementById("surprise-content");
-                content.classList.remove("hidden"); content.classList.add("flex");
-                gsap.fromTo(content, { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 1, ease: "elastic.out(1, 0.75)" });
-                // Confetti Burst
-                confetti({ particleCount: 50, spread: 70, origin: { y: 0.6 } });
-            }});
-        }
-
-        // --- PROMISES ---
-        const promises = [
-            { text: "I promise to stay even when it’s difficult.", sub: "Not just in the beautiful moments... but in the messy ones too.", img: "New folder (3)/promise1.jpg" },
-            { text: "I promise to love you the way you deserve.", sub: "Every single day. Even when life gets heavy.", img: "New folder (3)/promise2.jpg" },
-            { text: "I promise to listen to the words you don’t say.", sub: "Your silence. Your tone. I’ll hear everything.", img: "New folder (3)/promise3.jpg" },
-            { text: "I promise to protect your heart like it’s my own.", sub: "Because hurting you would mean hurting myself.", img: "New folder (3)/promise4.jpg" },
-            { text: "I promise to never let you feel alone.", sub: "Even if we fight. Even if we’re far away.", img: "New folder (3)/promise5.jpg" },
-            { text: "I promise to choose you again in every lifetime.", sub: "Intentionally. Every single time.", img: "New folder (3)/promise6.jpg" },
-            { text: "I promise to hold your hand through every fear.", sub: "No storm will ever make me let go.", img: "New folder (3)/promise7.jpg" },
-            { text: "I promise to be your peace.", sub: "The place you come to when the world gets too loud.", img: "New folder (3)/promise8.jpg" },
-            { text: "I promise to treasure your smile.", sub: "It is the most precious thing I own.", img: "New folder (3)/promise9.jpg" },
-            { text: "I promise to grow with you, not away from you.", sub: "As we change, we will change together.", img: "New folder (3)/promise10.jpg" },
-            { text: "I promise to always come back after every fight.", sub: "No argument is bigger than 'us'.", img: "New folder (3)/promise11.jpg" },
-            { text: "I promise to support your dreams.", sub: "Your success will always feel like my victory too.", img: "New folder (3)/promise12.jpg" },
-            { text: "I promise to love the sides you hide.", sub: "Even the ones you think are unlovable.", img: "New folder (3)/promise13.jpg" },
-            { text: "I promise to make you feel important.", sub: "Because you are my world.", img: "New folder (3)/promise14.jpg" },
-            { text: "I promise to stay loyal.", sub: "In heart, in words, in actions.", img: "New folder (3)/promise15.jpg" },
-            { text: "I promise to be gentle with your feelings.", sub: "You matter more than any ego.", img: "New folder (3)/promise16.jpg" },
-            { text: "I promise to give you reasons to trust me.", sub: "Every single day.", img: "New folder (3)/promise17.jpg" },
-            { text: "I promise to make you feel loved, always.", sub: "Not sometimes. Not occasionally. Always.", img: "New folder (3)/promise18.jpg" }
+        // Gallery
+        const memories = [
+            { src: "New folder (3)/mylove1.jpg", text: "Your smile makes my winter warm." },
+            { src: "New folder (3)/mylove2.jpg", text: "Eyes that hold my entire universe." },
+            { src: "New folder (3)/mylove3.jpg", text: "I want to live in this moment forever." },
+            { src: "New folder (3)/mylove4.jpg", text: "Elegance isn't what you wear, it's you." },
+            { src: "New folder (3)/sur1.jpg", text: "Even in chaos, you are my calm." },
+            { src: "New folder (3)/sur2.jpg", text: "Your laugh heals my broken parts." },
+            { src: "New folder (3)/sur3.jpg", text: "My favorite view in the world." },
+            { src: "New folder (3)/sur4.jpg", text: "Us. My favorite story." }
         ];
 
-        let pIdx = 0;
-        function loadPromise(idx) {
-            const img = document.getElementById('promise-img');
-            const txt = document.getElementById('promise-text');
-            const sub = document.getElementById('promise-sub');
-            const flash = document.getElementById('promise-flash');
-
-            // Flash Effect
-            gsap.fromTo(flash, { opacity: 0.8 }, { opacity: 0, duration: 0.8 });
-
-            // Text Change
-            txt.innerText = promises[idx].text;
-            sub.innerText = promises[idx].sub;
-            document.getElementById('promise-counter').innerText = `${idx + 1} / 18`;
-
-            // Image Change & Animation
-            img.src = promises[idx].img;
-            gsap.fromTo(img, { scale: 1.1, filter: "blur(5px)" }, { scale: 1, filter: "blur(0px)", duration: 2, ease: "power2.out" });
-            
-            // Text Entry
-            gsap.fromTo([txt, sub], { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 1, delay: 0.2, stagger: 0.1 });
+        let mIdx = 0;
+        function loadGallery() { revealNextMemory(); } 
+        function revealNextMemory() {
+            if(mIdx >= memories.length) { nextChapter(); return; }
+            const stage = document.getElementById("gallery-stage");
+            const data = memories[mIdx];
+            Array.from(stage.children).forEach(el => { gsap.to(el, { x: (Math.random()-0.5)*500, rotation: (Math.random()-0.5)*40, opacity: 0, duration: 1 }); });
+            const card = document.createElement("div");
+            card.className = "polaroid absolute top-0 bg-white p-3 shadow-2xl";
+            card.innerHTML = `<div class="w-64 h-80 overflow-hidden"><img src="${data.src}" onerror="this.src='https://source.unsplash.com/random/400x500/?romance,couple&sig=${mIdx}'" class="w-full h-full object-cover"></div>`;
+            stage.appendChild(card);
+            gsap.fromTo(card, { scale: 2, opacity: 0, rotation: 10 }, { scale: 1, opacity: 1, rotation: (Math.random()-0.5)*10, duration: 1.2, ease: "elastic.out(1, 0.8)" });
+            const caption = document.getElementById("gallery-caption");
+            gsap.fromTo(caption, {opacity:0, y:10}, {opacity:1, y:0, text: data.text, duration: 1});
+            mIdx++;
+            if(mIdx === memories.length) document.getElementById("gallery-btn").innerText = "Continue";
         }
 
-        function nextPromise() {
-            if (pIdx < promises.length - 1) {
-                pIdx++;
-                loadPromise(pIdx);
-                if (pIdx === promises.length - 1) {
-                    const btn = document.getElementById('btn-promise-next');
-                    btn.innerText = "Time for a Surprise";
-                    btn.onclick = nextChapter; 
+        // --- PUZZLE GAME LOGIC ---
+        function initPuzzleGame() {
+            const container = document.getElementById('puzzle-container');
+            container.innerHTML = '';
+            document.getElementById('game-next-btn').style.opacity = 0;
+            document.getElementById('puzzle-instruction').style.opacity = 1;
+
+            const cols = 3; const rows = 3;
+            const pieces = [];
+            const w = 300 / cols; const h = 400 / rows;
+            let solvedCount = 0;
+
+            const msgs = ["A stranger...", "Became a friend...", "Then my best friend...", "Then my love...", "Now my soulmate...", "My everything...", "My home...", "My future...", "My Nayanika."];
+
+            for(let r=0; r<rows; r++) {
+                for(let c=0; c<cols; c++) {
+                    const piece = document.createElement('div');
+                    piece.className = 'puzzle-piece';
+                    piece.style.width = w + 'px';
+                    piece.style.height = h + 'px';
+                    piece.style.backgroundPosition = `-${c*w}px -${r*h}px`;
+                    piece.style.top = (r*h) + 'px';
+                    piece.style.left = (c*w) + 'px';
+                    
+                    // Random scatter position
+                    const randX = (Math.random() - 0.5) * 800;
+                    const randY = (Math.random() - 0.5) * 800;
+                    const randRot = (Math.random() - 0.5) * 360;
+
+                    // Initial state: scattered
+                    gsap.set(piece, { x: randX, y: randY, rotation: randRot, opacity: 0.8 });
+
+                    // Click to solve
+                    piece.onclick = () => {
+                        if(piece.classList.contains('piece-solved')) return;
+                        piece.classList.add('piece-solved');
+                        
+                        // Audio visual feedback (sparkle)
+                        confetti({ particleCount: 15, spread: 20, origin: { x: mouseX/window.innerWidth, y: mouseY/window.innerHeight }, colors: ['#fff'] });
+
+                        // Animate to home
+                        gsap.to(piece, { x: 0, y: 0, rotation: 0, opacity: 1, duration: 0.8, ease: "power3.out", boxShadow: "none", borderColor: "transparent" });
+
+                        // Text Feedback
+                        const txt = document.getElementById('puzzle-msg');
+                        txt.innerText = msgs[solvedCount];
+                        gsap.fromTo(txt, {opacity:0, y:10}, {opacity:1, y:0, duration: 0.5});
+
+                        solvedCount++;
+                        if(solvedCount === cols*rows) {
+                            // Win condition
+                            gsap.to("#puzzle-instruction", {opacity:0});
+                            gsap.to("#puzzle-container", { boxShadow: "0 0 50px #e11d48", duration: 1 });
+                            document.getElementById('game-next-btn').style.pointerEvents = "auto";
+                            gsap.to("#game-next-btn", { opacity: 1, y: -10, duration: 1, delay: 1 });
+                            
+                            // Heart burst
+                            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#e11d48', '#fff'] });
+                        }
+                    };
+
+                    container.appendChild(piece);
+                    pieces.push(piece);
                 }
             }
         }
 
-        // --- CAKE & FINALE ---
+        // Letter
+        function openLetter() {
+            gsap.to("#letter-closed", { rotationX: 180, opacity: 0, duration: 0.8, onComplete: () => {
+                document.getElementById("letter-closed").style.display = "none";
+                const content = document.getElementById("letter-content");
+                content.classList.remove("hidden"); content.classList.add("flex");
+                gsap.fromTo(content, { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 1 });
+            }});
+        }
+
+        // Promises
+        const promises = [
+            { title: "To Stay", desc: "I promise to stay even when it’s difficult. Not just in the beautiful moments... but in the messy ones too.", img: "New folder (3)/promise1.jpg" },
+            { title: "To Love", desc: "I promise to love you the way you deserve. Every single day. Even when life gets heavy.", img: "New folder (3)/promise2.jpg" },
+            { title: "To Listen", desc: "I promise to listen to the words you don’t say. Your silence. Your tone. I’ll hear everything.", img: "New folder (3)/promise3.jpg" },
+            { title: "To Protect", desc: "I promise to protect your heart like it’s my own. Because hurting you would mean hurting myself.", img: "New folder (3)/promise4.jpg" },
+            { title: "Companionship", desc: "I promise to never let you feel alone. Even if we fight. Even if we’re far away.", img: "New folder (3)/promise5.jpg" },
+            { title: "My Choice", desc: "I promise to choose you again in every lifetime. Intentionally. Every single time.", img: "New folder (3)/promise6.jpg" },
+            { title: "Courage", desc: "I promise to hold your hand through every fear. No storm will ever make me let go.", img: "New folder (3)/promise7.jpg" },
+            { title: "Your Peace", desc: "I promise to be your peace. The place you come to when the world gets too loud.", img: "New folder (3)/promise8.jpg" },
+            { title: "To Treasure", desc: "I promise to treasure your smile. It is the most precious thing I own.", img: "New folder (3)/promise9.jpg" },
+            { title: "To Grow", desc: "I promise to grow with you, not away from you. As we change, we will change together.", img: "New folder (3)/promise10.jpg" },
+            { title: "Reconciliation", desc: "I promise to always come back after every fight. No argument is bigger than 'us'.", img: "New folder (3)/promise11.jpg" },
+            { title: "Support", desc: "I promise to support your dreams. Your success will always feel like my victory too.", img: "New folder (3)/promise12.jpg" },
+            { title: "Acceptance", desc: "I promise to love the sides you hide. Even the ones you think are unlovable.", img: "New folder (3)/promise13.jpg" },
+            { title: "Priority", desc: "I promise to make you feel important. Because you are my world.", img: "New folder (3)/promise14.jpg" },
+            { title: "Loyalty", desc: "I promise to stay loyal. In heart, in words, in actions.", img: "New folder (3)/promise15.jpg" },
+            { title: "Gentleness", desc: "I promise to be gentle with your feelings. You matter more than any ego.", img: "New folder (3)/promise16.jpg" },
+            { title: "Trust", desc: "I promise to give you reasons to trust me. Every single day.", img: "New folder (3)/promise17.jpg" },
+            { title: "Endless Love", desc: "I promise to make you feel loved, always. Not sometimes. Not occasionally. Always.", img: "New folder (3)/promise18.jpg" }
+        ];
+
+        let pIdx = 0;
+        function loadPromise(i) {
+            const p = promises[i];
+            const img = document.getElementById("promise-img");
+            const textCont = document.getElementById("promise-text-container");
+            gsap.to(textCont, { opacity: 0, y: 10, duration: 0.5, onComplete: () => {
+                document.getElementById("promise-title").innerText = p.title;
+                document.getElementById("promise-desc").innerText = p.desc;
+                document.getElementById("promise-count").innerText = `${i+1} / ${promises.length}`;
+                gsap.to(img, { opacity: 0, duration: 0.5, onComplete: () => {
+                    img.src = p.img;
+                    img.onerror = function() { this.src = `https://source.unsplash.com/random/400x500/?love,couple&sig=${i}`; };
+                    gsap.to(img, { opacity: 0.6, duration: 1 });
+                }});
+                gsap.to(textCont, { opacity: 1, y: 0, duration: 1, delay: 0.5 });
+            }});
+        }
+        function nextPromise() {
+            if(pIdx < promises.length-1) {
+                pIdx++; loadPromise(pIdx);
+                if(pIdx === promises.length-1) {
+                    const btn = document.getElementById("promise-next-btn");
+                    btn.innerText = "A Gift For You";
+                    btn.onclick = nextChapter;
+                }
+            }
+        }
+
+        // Gift
+        function openGift() {
+            gsap.to("#gift-box", { scale: 1.5, opacity: 0, duration: 0.6, onComplete: () => {
+                document.getElementById("gift-box").style.display = "none";
+                const cont = document.getElementById("gift-content");
+                cont.classList.remove("hidden"); cont.classList.add("flex");
+                gsap.to(cont, { scale: 1, opacity: 1, duration: 1, ease: "elastic.out(1, 0.75)" });
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#e11d48', '#fce7f3'] });
+            }});
+        }
+
+        // Cake
         let candlesOut = 0;
         function blowCandle(el) {
             const flame = el.querySelector('.flame');
             if(flame && !flame.classList.contains('out')) {
                 flame.classList.add('out'); candlesOut++;
-                const puff = document.createElement("div"); puff.innerText = "💨";
-                puff.style.position = "absolute"; puff.style.top = "-40px"; puff.style.left = "0"; puff.style.color = "white"; puff.style.animation = "fadeAndScale 1s forwards";
-                el.appendChild(puff);
-                if(candlesOut === 3) {
-                    document.getElementById("cake-instruction").innerText = "Make a wish & Cut the cake";
-                    gsap.to(".cake-body", { scale: 1.05, yoyo: true, repeat: -1, duration: 0.5 });
-                }
+                const smoke = document.createElement("div"); 
+                smoke.style.cssText = `position:absolute; top:-30px; left:0; color:gray; font-size:20px; animation: floatUp 2s forwards;`;
+                smoke.innerText = "💨"; el.appendChild(smoke);
+                if(candlesOut === 3) document.getElementById("wish-instruction").innerText = "Wish made. Now cut the cake.";
             }
         }
-        function cutCake() {
-            if(candlesOut < 3) return;
-            gsap.killTweensOf(".cake-body");
-            nextChapter(); // Goes to Finale (Chap 12)
+        function checkCake() {
+            if(candlesOut === 3) { confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } }); nextChapter(); } 
+            else { alert("Blow the candles first, my love!"); }
         }
 
-        function revealFinale() {
-            const colors = ['#fbcfe8', '#f472b6', '#db2777'];
+        // Finale
+        function triggerFinale() {
+            gsap.fromTo("#final-img", { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 2, ease: "power2.out" });
+            const msg = "Happy 17th Birthday, Nayanika. You are the poem I never knew how to write.";
+            gsap.to("#typewriter", { text: msg, duration: 6, delay: 1, ease: "none" });
             const end = Date.now() + 5000;
+            const colors = ['#be123c', '#fb7185', '#fff1f2'];
             (function frame() {
-                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: colors });
-                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: colors });
+                confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: colors });
+                confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: colors });
                 if (Date.now() < end) requestAnimationFrame(frame);
             }());
-
-            gsap.fromTo("#final-img", { scale: 0.8, opacity: 0, rotation: -5 }, { scale: 1, opacity: 1, rotation: 0, duration: 3, ease: "elastic.out(1, 0.5)" });
-            gsap.to("#typewriter", { text: "Happy Birthday, Nayanika. You are my answered prayer. ❤️", duration: 5, delay: 1, ease: "none" });
-            if(musicPlaying) gsap.to(audio, { volume: 1, duration: 3 });
         }
+        
+        const styleSheet = document.createElement("style");
+        styleSheet.innerText = `@keyframes floatUp { 0% { opacity: 0.8; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-50px); } }`;
+        document.head.appendChild(styleSheet);
 
-        // --- GALLERY ---
-        const memories = [
-            { src: "New folder (3)/mylove1.jpg", text: "Your smile makes my winter warm.", btn: "Next" },
-            { src: "New folder (3)/mylove2.jpg", text: "Eyes that hold my entire universe.", btn: "Next" },
-            { src: "New folder (3)/mylove3.jpg", text: "I want to live in this moment forever.", btn: "Next" },
-            { src: "New folder (3)/mylove4.jpg", text: "Elegance isn't what you wear, it's you.", btn: "Next" },
-            { src: "New folder (3)/sur1.jpg", text: "Even in chaos, you are my calm.", btn: "Next" },
-            { src: "New folder (3)/sur2.jpg", text: "Your laugh heals my broken parts.", btn: "Next" },
-            { src: "New folder (3)/sur3.jpg", text: "My favorite view in the world.", btn: "Next" },
-            { src: "New folder (3)/sur4.jpg", text: "Us. My favorite story.", btn: "Let's Laugh" }
-        ];
-        let mIdx = 0;
-        function revealNextMemory() {
-            if (mIdx >= memories.length) { nextChapter(); return; }
-            const stage = document.getElementById("gallery-stage");
-            const data = memories[mIdx];
-            
-            // Move old
-            stage.querySelectorAll(".polaroid").forEach(p => {
-                const rot = (Math.random() - 0.5) * 40; const x = (Math.random() - 0.5) * 400;
-                gsap.to(p, { x: x, rotation: rot, scale: 0.8, opacity: 0.5, duration: 1 });
-            });
-
-            // New
-            const div = document.createElement("div"); div.className = "polaroid absolute bg-white p-2 shadow-2xl w-64 transform transition duration-500";
-            div.innerHTML = `<img src="${data.src}" class="w-full h-80 object-cover">`;
-            stage.appendChild(div);
-            gsap.fromTo(div, { scale: 0, rotation: Math.random()*20-10 }, { scale: 1, rotation: Math.random()*6-3, duration: 1, ease: "back.out" });
-            
-            gsap.to("#gallery-caption", { opacity: 0, onComplete: () => {
-                document.getElementById("gallery-caption").innerText = `"${data.text}"`;
-                gsap.to("#gallery-caption", { opacity: 1 });
-            }});
-            document.getElementById("gallery-btn").innerText = data.btn;
-            mIdx++;
-        }
-
-        // --- BACKGROUND ---
-        function initParticles() {
-            const canvas = document.getElementById('bg-canvas');
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            const geometry = new THREE.BufferGeometry();
-            const count = 300; const pos = new Float32Array(count*3);
-            for(let i=0; i<count*3; i++) pos[i] = (Math.random()-0.5)*15;
-            geometry.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-            const material = new THREE.PointsMaterial({ size: 0.03, color: 0xfbcfe8, transparent: true, opacity: 0.6 });
-            const points = new THREE.Points(geometry, material);
-            scene.add(points);
-            camera.position.z = 5;
-            function animate() {
-                requestAnimationFrame(animate);
-                points.rotation.y += 0.0005; points.position.y += Math.sin(Date.now()*0.001)*0.001;
-                renderer.render(scene, camera);
-            }
-            animate();
-            window.addEventListener('resize', () => { camera.aspect = window.innerWidth/window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
-        }
     </script>
 </body>
 </html>
