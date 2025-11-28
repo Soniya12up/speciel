@@ -212,18 +212,13 @@
         </div>
 
         
-       <!-- NEW 1: SMILE SENSOR (FIXED) -->
-<div id="chap-1" class="chapter-container chapter-active">
-    <h2 class="text-3xl font-royal text-white mb-8">First, a check...</h2>
-    <!-- Added explicit z-index to ensure it captures hover/clicks -->
-    <div class="smile-sensor relative z-50" onmouseover="activateSmile()" onclick="activateSmile()">
-        😊
-    </div>
-    <p id="smile-msg" class="text-pink-300 font-script text-2xl mt-8 opacity-0 transition duration-1000">"When you smile, my whole world becomes lighter."</p>
-    
-    <!-- FIXED BUTTON: Removed 'pointer-events-none' class and handled it via inline style for better control -->
-    <button id="smile-btn" onclick="nextChapter()" class="majestic-btn opacity-0" style="pointer-events: none; margin-top: 30px;">Enter</button>
-</div>
+        <!-- 1: SMILE SENSOR -->
+        <div id="chap-1" class="chapter-container chapter-active">
+            <h2 class="text-3xl font-royal text-white mb-8">First, a check...</h2>
+            <div class="smile-sensor relative z-50" onmouseover="activateSmile()" onclick="activateSmile()">😊</div>
+            <p id="smile-msg" class="text-pink-300 font-script text-2xl mt-8 opacity-0 transition duration-1000">"When you smile, my whole world becomes lighter."</p>
+            <button id="smile-btn" onclick="nextChapter()" class="majestic-btn opacity-0" style="pointer-events: none; margin-top: 30px;">Enter</button>
+        </div>
 
         <!-- 2: THE REVELATION -->
         <div id="chap-2" class="chapter-container">
@@ -245,24 +240,20 @@
         <!-- 3: THE TIMELINE -->
         <div id="chap-3" class="chapter-container">
             <h2 class="text-3xl md:text-4xl font-royal text-pink-100 mb-12 border-b border-white/10 pb-4">Written In The Stars</h2>
-            
             <div class="relative w-full max-w-md h-[50vh] overflow-y-auto custom-scroll px-4 pointer-events-auto">
                 <div class="absolute left-[20px] top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-pink-700 to-transparent"></div>
-                
                 <div class="ml-10 mb-10 relative group text-left">
                     <div class="absolute -left-[45px] top-2 w-3 h-3 bg-pink-500 rounded-full shadow-[0_0_10px_#ec4899]"></div>
                     <span class="text-xs font-royal text-pink-400 tracking-widest">24 JANUARY 2008</span>
                     <h3 class="text-xl text-white mt-1 font-royal">A Star Was Born</h3>
                     <p class="text-sm text-gray-400 mt-2 font-body font-light">The day the world became a little brighter. My destiny began here, even if I didn't know it yet.</p>
                 </div>
-
                 <div class="ml-10 mb-10 relative group text-left">
                     <div class="absolute -left-[45px] top-2 w-3 h-3 bg-white border border-pink-500 rounded-full"></div>
                     <span class="text-xs font-royal text-pink-400 tracking-widest">24 MAY</span>
                     <h3 class="text-xl text-white mt-1 font-royal">"The Day You Stayed"</h3>
                     <p class="text-sm text-gray-400 mt-2 font-body font-light">Two souls, wandering the same earth, finally found their home in each other.</p>
                 </div>
-
                 <div class="ml-10 relative group text-left">
                     <div class="absolute -left-[45px] top-2 w-3 h-3 bg-white border border-pink-500 rounded-full"></div>
                     <span class="text-xs font-royal text-pink-400 tracking-widest">TODAY</span>
@@ -273,53 +264,46 @@
             <button onclick="nextChapter()" class="majestic-btn">Healing</button>
         </div>
 
-        <!-- NEW 4: HEALING HEART -->
+        <!-- 4: HEALING HEART -->
         <div id="chap-4" class="chapter-container">
             <h2 class="text-3xl font-royal text-white mb-2">You Healed Me</h2>
             <p class="text-xs tracking-widest text-white/50 mb-10 uppercase">Tap the broken heart to make it whole</p>
-            
             <div class="heart-container" onclick="healHeart(this)">
                 <svg viewBox="0 0 100 100" class="w-full h-full overflow-visible">
                     <path class="heart-path" d="M50 88.9L16.7 55.6C7.2 46.1 7.2 30.9 16.7 21.4s24.8-9.5 33.3 0L50 21.4l0 0 0 0L83.3 21.4c8.5-9.5 23.8-9.5 33.3 0s9.5 24.7 0 34.2L50 88.9z"/>
                     <path class="crack" d="M50 25 L40 40 L60 55 L45 70 L50 85" fill="none" />
                 </svg>
             </div>
-
             <p id="heal-msg" class="text-rose-300 font-script text-3xl mt-8 opacity-0 transition">"You make everything in me whole."</p>
             <button id="heal-btn" onclick="nextChapter()" class="majestic-btn opacity-0 pointer-events-none">Connection</button>
         </div>
 
-        <!-- NEW 5: HAND DRAG -->
+        <!-- 5: HAND DRAG -->
         <div id="chap-5" class="chapter-container">
             <h2 class="text-3xl font-royal text-white mb-2">Connection</h2>
             <p class="text-xs tracking-widest text-white/50 mb-20 uppercase">Drag the hand to hold mine</p>
-            
             <div class="relative w-full h-[50vh] max-w-md bg-white/5 rounded-lg border border-white/10" id="drag-zone">
                 <div id="my-hand" class="hand">🫴</div>
                 <div id="her-hand" class="hand">🤚</div>
             </div>
-
             <p id="hand-msg" class="text-white font-body mt-6 opacity-0">This is how I want to hold you forever.</p>
             <button id="hand-btn" onclick="nextChapter()" class="majestic-btn opacity-0 pointer-events-none">Memories</button>
         </div>
 
-        <!-- 6: GALLERY (Modified with Emotional Text) -->
+        <!-- 6: GALLERY -->
         <div id="chap-6" class="chapter-container">
             <h2 class="text-3xl font-royal text-white mb-2">Fragments of Beauty</h2>
             <p class="font-script text-pink-300 text-2xl mb-8">"You are art I never tire of admiring"</p>
-            
             <div id="gallery-stage" class="relative w-full h-[45vh] flex justify-center items-center perspective-[1000px]"></div>
-            
             <div class="h-24 flex items-center justify-center mt-4 px-4">
                 <p id="gallery-caption" class="text-white/80 font-body font-light italic tracking-wide text-center text-lg"></p>
             </div>
             <button id="gallery-btn" onclick="revealNextMemory()" class="majestic-btn">Reveal Next</button>
         </div>
 
-        <!-- NEW 7: CONFESSIONS & NUMBERS -->
+        <!-- 7: CONFESSIONS & NUMBERS -->
         <div id="chap-7" class="chapter-container">
             <h2 class="text-3xl font-royal text-white mb-6">Things I Never Say...</h2>
-            
             <div class="grid grid-cols-2 gap-8 mb-8 w-full max-w-lg">
                 <div class="text-center">
                     <h3 class="text-4xl font-royal gold-text" id="days-count">0</h3>
@@ -330,7 +314,6 @@
                     <p class="text-[10px] uppercase tracking-widest text-white/50">Moments Loved</p>
                 </div>
             </div>
-
             <div class="confession-grid pointer-events-auto">
                 <div class="confession-card" onclick="revealConfession(this)">
                     <p class="text-sm font-body text-pink-100">I love how you get jealous.</p>
@@ -352,7 +335,7 @@
             <button onclick="nextChapter()" class="majestic-btn">Close To You</button>
         </div>
 
-        <!-- NEW 8: THE HUG & CAROUSEL -->
+        <!-- 8: THE HUG & CAROUSEL -->
         <div id="chap-8" class="chapter-container">
             <div class="max-w-xl text-center px-6 mb-10">
                 <h2 class="text-2xl md:text-4xl font-body font-light text-white leading-relaxed opacity-0" id="hug-text">
@@ -401,7 +384,7 @@
                 </div>
             </div>
 
-            <!-- PROMISES OVERLAY (Inside Chap 10 for better flow) -->
+            <!-- PROMISES OVERLAY -->
             <div id="promise-overlay" class="hidden absolute inset-0 flex flex-col items-center justify-center bg-black/90 z-50">
                 <h2 class="text-2xl md:text-3xl font-royal text-pink-100 mb-6">My Sacred Vows</h2>
                 <div id="promise-card" class="relative w-64 h-80 md:w-72 md:h-96 bg-black/40 border border-white/10 rounded-xl overflow-hidden flex flex-col justify-end p-6 shadow-2xl backdrop-blur-sm">
@@ -417,8 +400,28 @@
             </div>
         </div>
 
-        <!-- 11: CAKE -->
+        <!-- NEW 11: REMEMBER THIS (VIDEO SECTION) -->
         <div id="chap-11" class="chapter-container">
+            <h2 class="text-3xl md:text-5xl font-royal text-white mb-8 border-b border-pink-500/30 pb-4">Remember This...</h2>
+            
+            <div class="relative p-2 border border-white/20 rounded-lg bg-white/5 backdrop-blur-sm shadow-[0_0_30px_rgba(225,29,72,0.3)] pointer-events-auto">
+                <div class="relative w-full max-w-2xl aspect-video overflow-hidden rounded">
+                    <video id="memory-video" class="w-full h-full object-cover" controls preload="metadata">
+                        <source src="New folder (3)/video.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+
+            <p class="text-pink-200 font-script text-2xl mt-8 text-center opacity-80">
+                "A moment frozen in time, just for us."
+            </p>
+            
+            <button onclick="stopVideoAndNext()" class="majestic-btn">Make A Wish</button>
+        </div>
+
+        <!-- 12: CAKE (Renumbered from 11) -->
+        <div id="chap-12" class="chapter-container">
             <h2 class="text-4xl md:text-5xl font-royal gold-text mb-2 text-center">Happy 17th Birthday</h2>
             <p id="wish-instruction" class="text-[10px] tracking-[0.4em] text-pink-400 uppercase mb-12 animate-pulse text-center">Close your eyes & Make a wish</p>
             <div class="cake-container">
@@ -434,8 +437,8 @@
             </div>
         </div>
 
-        <!-- 12: FINALE -->
-        <div id="chap-12" class="chapter-container">
+        <!-- 13: FINALE (Renumbered from 12) -->
+        <div id="chap-13" class="chapter-container">
             <div class="relative group cursor-pointer mb-8">
                 <div class="absolute -inset-4 bg-rose-600/30 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition duration-1000"></div>
                 <img src="New folder (3)/surprise.jpg" onerror="this.src='https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?q=80&w=600&auto=format&fit=crop'" id="final-img" class="relative w-64 md:w-80 rounded-lg border border-white/10 shadow-2xl transform scale-90 opacity-0">
@@ -506,10 +509,11 @@
 
         // --- 4. NAVIGATION ---
         let currentChap = 1;
-        const totalChaps = 12;
+        const totalChaps = 13; // UPDATED to 13
 
         window.onload = () => {
             initThree();
+            initVideoLogic(); // Initialize Video Listeners
             gsap.to("#loader", { opacity: 0, duration: 1.5, delay: 1, onComplete: () => {
                 document.getElementById("loader").style.display = "none";
                 document.getElementById("intro-screen").classList.remove("hidden");
@@ -526,6 +530,40 @@
             }});
         }
 
+        // --- VIDEO LOGIC (Pause Music when playing, Resume when paused) ---
+        function initVideoLogic() {
+            const video = document.getElementById('memory-video');
+            const bgAudio = document.getElementById('bg-music');
+
+            if(video && bgAudio) {
+                // When video plays -> Fade out music
+                video.onplay = () => {
+                    gsap.to(bgAudio, { volume: 0, duration: 0.5, onComplete: () => bgAudio.pause() });
+                    musicPlaying = false; // Update state
+                };
+
+                // When video pauses -> Fade in music
+                video.onpause = () => {
+                    bgAudio.play();
+                    gsap.to(bgAudio, { volume: 0.5, duration: 1 });
+                    musicPlaying = true;
+                };
+
+                // When video ends -> Fade in music
+                video.onended = () => {
+                    bgAudio.play();
+                    gsap.to(bgAudio, { volume: 0.5, duration: 1 });
+                    musicPlaying = true;
+                };
+            }
+        }
+
+        function stopVideoAndNext() {
+            const video = document.getElementById('memory-video');
+            if(video) video.pause(); // Triggers onpause -> Resumes music automatically
+            nextChapter();
+        }
+
         function nextChapter() {
             const curr = document.getElementById(`chap-${currentChap}`);
             const next = document.getElementById(`chap-${currentChap+1}`);
@@ -534,11 +572,10 @@
             gsap.to("#progress", { width: `${(currentChap/totalChaps)*100}%`, duration: 1.5 });
             gsap.to(curr, { opacity: 0, scale: 0.95, filter: "blur(10px)", duration: 1, onComplete: () => {
                 curr.classList.remove("chapter-active");
-                // Force hide to prevent clicking through
                 curr.style.display = "none";
                 
                 if(next) {
-                    next.style.display = "flex"; // Make sure flex is restored
+                    next.style.display = "flex"; 
                     next.classList.add("chapter-active");
                     gsap.fromTo(next, { opacity: 0, scale: 1.05, filter: "blur(10px)" }, { opacity: 1, scale: 1, filter: "blur(0px)", duration: 1.5 });
                     currentChap++;
@@ -560,40 +597,34 @@
                 initCarousel();
             }
             if(id === 9) initPuzzleGame();
-            if(id === 12) triggerFinale();
+            if(id === 13) triggerFinale(); // Updated from 12 to 13
         }
 
         // --- EMOTIONAL INTERACTIONS ---
         
-        // 1. SMILE SENSOR LOGIC (FIXED)
-let smileActivated = false; // Prevents glitches
-
-function activateSmile() {
-    if (!smileActivated) {
-        smileActivated = true;
-        const msg = document.getElementById("smile-msg");
-        const btn = document.getElementById("smile-btn");
-
-        // Animate Message
-        gsap.to(msg, { opacity: 1, y: -10, duration: 1 });
-        
-        // Animate Sensor
-        gsap.to(".smile-sensor", { scale: 1.2, borderColor: "#fff", duration: 0.5 });
-        confetti({ particleCount: 50, spread: 70, origin: { y: 0.6 } });
-
-        // Show Button and Enable Clicking
-        gsap.to(btn, { 
-            opacity: 1, 
-            duration: 1, 
-            delay: 1, 
-            onStart: () => {
-                // Ensures button is clickable as soon as it starts appearing
-                btn.style.pointerEvents = "auto";
-                btn.style.cursor = "pointer";
+        // 1. SMILE SENSOR LOGIC
+        let smileActivated = false; 
+        function activateSmile() {
+            if (!smileActivated) {
+                smileActivated = true;
+                const msg = document.getElementById("smile-msg");
+                const btn = document.getElementById("smile-btn");
+                gsap.to(msg, { opacity: 1, y: -10, duration: 1 });
+                gsap.to(".smile-sensor", { scale: 1.2, borderColor: "#fff", duration: 0.5 });
+                confetti({ particleCount: 50, spread: 70, origin: { y: 0.6 } });
+                gsap.to(btn, { 
+                    opacity: 1, 
+                    duration: 1, 
+                    delay: 1, 
+                    onStart: () => {
+                        btn.style.pointerEvents = "auto";
+                        btn.style.cursor = "pointer";
+                    }
+                });
             }
-        });
-    }
-}        // 4. HEALING HEART
+        }       
+
+        // 4. HEALING HEART
         function healHeart(el) {
             if(!el.classList.contains("healed")) {
                 el.classList.add("healed");
@@ -612,7 +643,6 @@ function activateSmile() {
                 onDragEnd: function() {
                     const myHand = document.getElementById("my-hand").getBoundingClientRect();
                     const herHand = this.target.getBoundingClientRect();
-                    // Simple distance check
                     const dx = Math.abs(myHand.left - herHand.left);
                     const dy = Math.abs(myHand.top - herHand.top);
                     
@@ -628,7 +658,7 @@ function activateSmile() {
             });
         }
 
-        // 6. GALLERY (Your original logic)
+        // 6. GALLERY
         const memories = [
             { src: "New folder (3)/mylove1.jpg", text: "Your smile makes my winter warm." },
             { src: "New folder (3)/mylove2.jpg", text: "Eyes that hold my entire universe." },
@@ -658,7 +688,7 @@ function activateSmile() {
 
         // 7. NUMBERS & CONFESSIONS
         function initNumbers() {
-            // Days since May 24, 2008 (Approx calculation)
+            // Days since May 24, 2008
             const start = new Date("2008-05-24");
             const now = new Date();
             const diff = Math.floor((now - start) / (1000 * 60 * 60 * 24));
@@ -677,7 +707,7 @@ function activateSmile() {
             }
         }
 
-        // 8. CAROUSEL (One Word)
+        // 8. CAROUSEL
         function initCarousel() {
             const words = ["Peace", "Home", "Comfort", "Happiness", "Forever", "Magic"];
             let wIdx = 0;
@@ -804,7 +834,7 @@ function activateSmile() {
             }
         }
 
-        // 11. CAKE
+        // 12. CAKE
         let candlesOut = 0;
         function blowCandle(el) {
             const flame = el.querySelector('.flame');
@@ -821,7 +851,7 @@ function activateSmile() {
             else { alert("Blow the candles first, my love!"); }
         }
 
-        // 12. FINALE
+        // 13. FINALE
         function triggerFinale() {
             gsap.fromTo("#final-img", { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 2, ease: "power2.out" });
             const msg = "Happy 17th Birthday, Nayanika. You are the poem I never knew how to write.";
