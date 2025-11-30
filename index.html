@@ -85,10 +85,47 @@
         #her-hand:active { cursor: grabbing; transform: scale(1.1); }
         
         .polaroid { background: #fff; padding: 10px 10px 25px 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
+        
+        /* --- PUZZLE FIX --- */
         #puzzle-wrapper { position: relative; width: 80vw; max-width: 300px; aspect-ratio: 3/4; margin: 0 auto; }
         #puzzle-container { width: 100%; height: 100%; position: relative; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); }
-        .puzzle-piece { position: absolute; background-image: url('New folder (3)/mylove1.jpg'); background-repeat: no-repeat; cursor: pointer; border: 1px solid rgba(255,255,255,0.3); box-shadow: 0 0 10px rgba(225, 29, 72, 0.5); pointer-events: auto; z-index: 100; }
+        .puzzle-piece { 
+            position: absolute; 
+            background-image: url('New folder (3)/mylove1.jpg'); 
+            background-repeat: no-repeat; 
+            background-size: 300% 300%; /* FIX: Scales image relative to piece size */
+            cursor: pointer; 
+            border: 1px solid rgba(255,255,255,0.3); 
+            box-shadow: 0 0 10px rgba(225, 29, 72, 0.5); 
+            pointer-events: auto; 
+            z-index: 100; 
+        }
         .piece-solved { border: none; box-shadow: none; pointer-events: none; z-index: 1; }
+
+        /* --- FUNNY SECTION STYLES --- */
+        .funny-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; max-width: 500px; pointer-events: auto; }
+        .funny-item { 
+            background: #111; border: 1px solid #333; aspect-ratio: 1; 
+            display: flex; align-items: center; justify-content: center; 
+            cursor: pointer; transition: 0.3s; position: relative; overflow: hidden;
+            border-radius: 8px;
+        }
+        .funny-item:hover { transform: scale(1.05); border-color: #e11d48; }
+        .funny-item span { font-size: 2rem; }
+        .funny-modal {
+            position: absolute; inset: 0; background: rgba(0,0,0,0.95); z-index: 60;
+            display: flex; flex-col; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; padding: 20px;
+        }
+        .funny-polaroid {
+            background: white; padding: 15px 15px 50px 15px; transform: rotate(-2deg);
+            max-width: 300px; box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            animation: float 3s infinite ease-in-out;
+        }
+        .funny-caption {
+            font-family: 'Great Vibes', cursive; color: #333; font-size: 1.5rem;
+            position: absolute; bottom: 10px; width: 100%; text-align: center; left: 0;
+        }
 
         .cake-container { position: relative; cursor: pointer; transform: scale(1.2); pointer-events: auto; margin-top: 50px; }
         .flame { width: 12px; height: 20px; background: #fbbf24; border-radius: 50% 50% 20% 20%; position: absolute; top: -25px; left: 50%; transform: translateX(-50%); box-shadow: 0 0 20px #f59e0b, 0 0 40px #b45309; animation: flicker 0.8s infinite alternate; }
@@ -111,13 +148,13 @@
     <div class="vignette"></div>
     <canvas id="bg-canvas" style="position: fixed; top:0; left:0; z-index:-1;"></canvas>
 
-    <!-- AUDIO -->
-    <audio id="bg-music" loop preload="auto"><source src="songs1/love12.mp3" type="audio/mpeg"></audio>
+    <!-- AUDIO: Using metadata preload to prevent loading hangs -->
+    <audio id="bg-music" loop preload="metadata"><source src="songs1/love12.mp3" type="audio/mpeg"></audio>
 
     <!-- LOADER -->
     <div id="loader" class="fixed inset-0 bg-black z-[100] flex flex-col items-center justify-center font-tech text-green-500">
         <div class="w-24 h-24 border-2 border-green-500 rounded-full border-t-transparent animate-spin mb-4"></div>
-        <p class="tracking-widest">LOADING SISTER_DATA...</p>
+        <p class="tracking-widest">LOADING DATA...</p>
     </div>
 
     <!-- ==================== PRANK STAGE ==================== -->
@@ -314,7 +351,7 @@
             <h2 class="text-3xl font-royal text-white mb-8">Remember This Moment of Us</h2>
             <div class="relative p-2 border border-white/20 rounded-lg bg-white/5 pointer-events-auto">
                 <div class="relative w-full max-w-2xl aspect-video overflow-hidden rounded">
-                    <!-- OLD VIDEO FILE -->
+                    <!-- OLD VIDEO FILE (Preload metadata only) -->
                     <video id="memory-video" class="w-full h-full object-cover" controls preload="metadata">
                         <source src="New folder (3)/video.mp4" type="video/mp4">
                     </video>
@@ -323,7 +360,7 @@
             <button onclick="stopVideoAndNext()" class="majestic-btn mt-8">One Last Thing...</button>
         </div>
 
-        <!-- 12: DO YOU LOVE ME? (REPLACES OLD VIDEO SECTION) -->
+        <!-- 12: DO YOU LOVE ME? -->
         <div id="chap-12" class="chapter-container">
             <h2 class="text-3xl font-royal text-white mb-8">One Last Question...</h2>
             <h1 class="text-5xl md:text-7xl font-script text-pink-400 mb-12">Do you love me?</h1>
@@ -336,8 +373,29 @@
             <p id="plea-msg" class="text-rose-400 font-tech mt-8 opacity-0 transition-opacity duration-300 text-lg"></p>
         </div>
 
-        <!-- 13: CAKE -->
+        <!-- 13: NEW FUNNY PHOTOS SURPRISE (INTERACTIVE) -->
         <div id="chap-13" class="chapter-container">
+            <h2 class="text-3xl font-royal text-white mb-2">I have a surprise for you</h2>
+            <p class="text-pink-300 font-script text-xl mb-6">"I kept these surprises for this day"</p>
+            
+            <!-- Grid of Cards -->
+            <div id="funny-grid-container" class="funny-grid"></div>
+
+            <!-- Modal for Focused View -->
+            <div id="funny-modal" class="funny-modal" onclick="closeFunnyModal()">
+                <div class="funny-polaroid" onclick="event.stopPropagation()">
+                    <div class="w-full aspect-[3/4] overflow-hidden bg-gray-200">
+                        <img id="funny-modal-img" class="w-full h-full object-cover">
+                    </div>
+                    <div class="funny-caption" id="funny-modal-text"></div>
+                </div>
+            </div>
+
+            <button onclick="nextChapter()" class="majestic-btn mt-8">Proceed to Cake</button>
+        </div>
+
+        <!-- 14: CAKE -->
+        <div id="chap-14" class="chapter-container">
             <h2 class="text-4xl font-royal gold-text mb-2 text-center">Happy 17th Birthday</h2>
             <div class="cake-container">
                 <div class="flex gap-4 justify-center absolute -top-10 w-full z-10">
@@ -349,8 +407,8 @@
             </div>
         </div>
 
-        <!-- 14: FINALE (PHOTO + FLOWER SHOWER) -->
-        <div id="chap-14" class="chapter-container">
+        <!-- 15: FINALE -->
+        <div id="chap-15" class="chapter-container">
             <div class="relative w-full h-full flex flex-col items-center justify-center">
                 <!-- Sister Photo Container -->
                 <div id="sister-container" class="relative z-10 mb-8 opacity-0 transform scale-50">
@@ -369,7 +427,6 @@
     <!-- FULL SCREEN LOVE VIDEO OVERLAY -->
     <div id="love-video-overlay" class="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center hidden opacity-0 transition-opacity duration-1000">
         <video id="final-love-video" class="w-full h-full object-contain" controls>
-            <!-- ⬇️ CHANGE THE FILENAME HERE FOR YOUR NEW VIDEO ⬇️ -->
             <source src="New folder (3)/answer.mp4" type="video/mp4">
         </video>
         <button onclick="closeLoveVideo()" class="absolute top-5 right-5 text-white/50 hover:text-white text-5xl z-[101]">&times;</button>
@@ -385,23 +442,28 @@
 
         // --- 1. BACKGROUND ---
         function initThree() {
-            const canvas = document.getElementById('bg-canvas');
-            const scene = new THREE.Scene(); scene.fog = new THREE.FogExp2(0x050203, 0.002);
-            const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000); camera.position.z = 1000;
-            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true }); renderer.setSize(window.innerWidth, window.innerHeight);
-            const geometry = new THREE.BufferGeometry();
-            const positions = []; const colors = []; const colorObj = new THREE.Color();
-            for(let i=0; i<1500; i++) {
-                positions.push((Math.random()-0.5)*2000, (Math.random()-0.5)*2000, (Math.random()-0.5)*2000);
-                if(Math.random()>0.5) colorObj.setHex(0xe11d48); else colorObj.setHex(0xffffff);
-                colors.push(colorObj.r, colorObj.g, colorObj.b);
+            try {
+                const canvas = document.getElementById('bg-canvas');
+                if(!canvas) return;
+                const scene = new THREE.Scene(); scene.fog = new THREE.FogExp2(0x050203, 0.002);
+                const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000); camera.position.z = 1000;
+                const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true }); renderer.setSize(window.innerWidth, window.innerHeight);
+                const geometry = new THREE.BufferGeometry();
+                const positions = []; const colors = []; const colorObj = new THREE.Color();
+                for(let i=0; i<1500; i++) {
+                    positions.push((Math.random()-0.5)*2000, (Math.random()-0.5)*2000, (Math.random()-0.5)*2000);
+                    if(Math.random()>0.5) colorObj.setHex(0xe11d48); else colorObj.setHex(0xffffff);
+                    colors.push(colorObj.r, colorObj.g, colorObj.b);
+                }
+                geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3)); geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+                const starField = new THREE.Points(geometry, new THREE.PointsMaterial({ size: 2, vertexColors: true, transparent: true, opacity: 0.8 }));
+                scene.add(starField);
+                function animate() { requestAnimationFrame(animate); starField.rotation.x += 0.0003; starField.rotation.y += 0.0003; renderer.render(scene, camera); }
+                animate();
+                window.addEventListener('resize', () => { camera.aspect = window.innerWidth/window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
+            } catch(e) {
+                console.log("3D Background Error (Ignore if low end device):", e);
             }
-            geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3)); geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-            const starField = new THREE.Points(geometry, new THREE.PointsMaterial({ size: 2, vertexColors: true, transparent: true, opacity: 0.8 }));
-            scene.add(starField);
-            function animate() { requestAnimationFrame(animate); starField.rotation.x += 0.0003; starField.rotation.y += 0.0003; renderer.render(scene, camera); }
-            animate();
-            window.addEventListener('resize', () => { camera.aspect = window.innerWidth/window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
         }
 
         // --- 2. AUDIO CONTROL ---
@@ -413,15 +475,25 @@
             musicPlaying = !musicPlaying;
         }
 
-        // --- 3. INIT ---
+        // --- 3. INIT (ROBUST) ---
+        function removeLoader() {
+            const l = document.getElementById("loader");
+            if(l && l.style.display !== "none") {
+                gsap.to(l, { opacity: 0, duration: 1.5, onComplete: () => {
+                    l.style.display = "none";
+                    document.getElementById("prank-stage").classList.remove("hidden");
+                }});
+            }
+        }
+
         window.onload = () => {
             initThree();
-            initVideoLogic(); // Restored to control the 'old video'
-            gsap.to("#loader", { opacity: 0, duration: 1.5, delay: 1, onComplete: () => {
-                document.getElementById("loader").style.display = "none";
-                document.getElementById("prank-stage").classList.remove("hidden");
-            }});
+            initVideoLogic(); 
+            setTimeout(removeLoader, 1500); // Normal load time
         };
+
+        // SAFETY FALLBACK: If window.onload hangs, force open after 4s
+        setTimeout(removeLoader, 4000);
 
         // --- 4. PRANK LOGIC ---
         function checkContract() {
@@ -431,7 +503,7 @@
         }
         function nextPrank(num) {
             const curr = document.getElementById(`prank-${num-1}`); const next = document.getElementById(`prank-${num}`);
-            if(num===2){ audio.volume=0; audio.play().then(()=>audio.pause()).catch(e=>{}); } // Unlock Audio
+            if(num===2){ audio.volume=0; audio.play().then(()=>audio.pause()).catch(e=>{}); } 
             gsap.to(curr, { opacity: 0, scale: 0.9, duration: 0.5, onComplete: () => {
                 curr.style.pointerEvents = "none"; gsap.to(next, { opacity: 1, scale: 1, pointerEvents: "auto", duration: 0.5 });
             }});
@@ -455,7 +527,7 @@
         }
 
         // --- 5. MAIN NAVIGATION ---
-        let currentChap = 1; const totalChaps = 14; // Increased to 14
+        let currentChap = 1; const totalChaps = 15; 
         function startJourney() {
             gsap.to("#intro-screen", { opacity: 0, duration: 2, pointerEvents: "none", onComplete: () => {
                 document.getElementById("intro-screen").style.display = "none";
@@ -486,7 +558,8 @@
             if(id===7) initNumbers(); 
             if(id===8) { gsap.to("#hug-text", { opacity: 1, duration: 3, delay: 1 }); initCarousel(); } 
             if(id===9) initPuzzleGame(); 
-            if(id===14) triggerFinale(); // Changed to 14
+            if(id===13) initFunnySurprise(); // New Funny Section
+            if(id===15) triggerFinale(); 
         }
 
         // --- 6. CHAPTER LOGIC ---
@@ -495,7 +568,6 @@
         function healHeart(el) { if(!el.classList.contains("healed")) { el.classList.add("healed"); confetti({ particleCount: 30, spread: 40, colors: ['#e11d48'], origin: { y: 0.5 } }); gsap.to("#heal-msg", { opacity: 1, y: -10, duration: 1.5 }); gsap.to("#heal-btn", { opacity: 1, duration: 1, delay: 1.5 }); document.getElementById("heal-btn").style.pointerEvents = "auto"; } }
         function initHandDrag() { Draggable.create("#her-hand", { type: "x,y", bounds: "#drag-zone", onDragEnd: function() { const m=document.getElementById("my-hand").getBoundingClientRect(); const h=this.target.getBoundingClientRect(); if(Math.abs(m.left-h.left)<100 && Math.abs(m.top-h.top)<100) { gsap.to(this.target, {x:m.left-h.left, y:m.top-h.top, duration:0.5}); gsap.to("#hand-msg", {opacity:1, duration:1}); gsap.to("#hand-btn", {opacity:1, duration:1, delay:1}); document.getElementById("hand-btn").style.pointerEvents="auto"; confetti({particleCount:50, spread:60, colors:['#fff', '#e11d48']}); this.disable(); } }}); }
         
-        // FULL MEMORIES RESTORED
         const memories = [
             { src: "New folder (3)/mylove1.jpg", text: "Your smile makes my winter warm." },
             { src: "New folder (3)/mylove2.jpg", text: "Eyes that hold my entire universe." },
@@ -519,10 +591,88 @@
         function initNumbers() { const obj={val:0}; gsap.to(obj, {val: Math.floor((new Date()-new Date("2008-05-24"))/(1000*60*60*24)), duration:3, ease:"power2.out", onUpdate:()=>{document.getElementById("days-count").innerText=Math.floor(obj.val)}}); }
         function revealConfession(el) { if(!el.classList.contains("revealed")) { el.classList.add("revealed"); gsap.to(el, { scale: 1.05, duration: 0.3, yoyo: true, repeat: 1 }); }}
         function initCarousel() { const w = ["Peace", "Home", "Comfort", "Happiness", "Forever"]; let i=0; setInterval(()=>{ i=(i+1)%w.length; gsap.to("#word-carousel", {opacity:0, duration:0.5, onComplete:()=>{document.getElementById("word-carousel").innerText=w[i]; gsap.to("#word-carousel", {opacity:1, duration:0.5});}}); }, 2500); }
-        function initPuzzleGame() { const c=document.getElementById('puzzle-container'); c.innerHTML=''; let count=0; for(let i=0; i<9; i++) { const p=document.createElement('div'); p.className='puzzle-piece'; p.style.width='33.3%'; p.style.height='33.3%'; p.style.left=(i%3)*33.3+'%'; p.style.top=Math.floor(i/3)*33.3+'%'; p.style.backgroundPosition = `-${(i%3)*100}px -${Math.floor(i/3)*100}px`; gsap.set(p, {x:(Math.random()-0.5)*200, y:(Math.random()-0.5)*200, opacity:0}); gsap.to(p, {opacity:1, duration:0.5, delay:Math.random()}); p.onclick=()=>{p.classList.add('piece-solved'); gsap.to(p, {x:0, y:0, opacity:1, duration:0.5, border:"none", zIndex:1}); count++; if(count===9){document.getElementById('game-next-btn').style.pointerEvents="auto"; gsap.to("#game-next-btn", {opacity:1, y:-10, duration:1}); confetti({particleCount:100, spread:70, origin:{y:0.6}});} }; c.appendChild(p); } }
+        
+        // --- FIXED PUZZLE LOGIC ---
+        function initPuzzleGame() { 
+            const c=document.getElementById('puzzle-container'); 
+            c.innerHTML=''; 
+            let count=0; 
+            for(let i=0; i<9; i++) { 
+                const p=document.createElement('div'); 
+                p.className='puzzle-piece'; 
+                p.style.width='33.3%'; 
+                p.style.height='33.3%'; 
+                p.style.left=(i%3)*33.3+'%'; 
+                p.style.top=Math.floor(i/3)*33.3+'%'; 
+                
+                // PERCENTAGE BASED POSITIONS
+                p.style.backgroundPosition = `${(i % 3) * 50}% ${Math.floor(i / 3) * 50}%`; 
+                
+                gsap.set(p, {x:(Math.random()-0.5)*200, y:(Math.random()-0.5)*200, opacity:0}); 
+                gsap.to(p, {opacity:1, duration:0.5, delay:Math.random()}); 
+                p.onclick=()=>{
+                    p.classList.add('piece-solved'); 
+                    gsap.to(p, {x:0, y:0, opacity:1, duration:0.5, border:"none", zIndex:1}); 
+                    count++; 
+                    if(count===9){
+                        document.getElementById('game-next-btn').style.pointerEvents="auto"; 
+                        gsap.to("#game-next-btn", {opacity:1, y:-10, duration:1}); 
+                        confetti({particleCount:100, spread:70, origin:{y:0.6}});
+                    } 
+                }; 
+                c.appendChild(p); 
+            } 
+        }
+
+        // --- NEW FUNNY SURPRISE LOGIC ---
+        const funnyMoments = [
+            { src: "New folder (3)/funny1.jpg", text: "That face when I steal your food..." },
+            { src: "New folder (3)/funny2.jpg", text: "Modeling? Or just tripping?" },
+            { src: "New folder (3)/funny3.jpg", text: "Pure chaos in one picture." },
+            { src: "New folder (3)/funny4.jpg", text: "We don't talk about this hair day." },
+            { src: "New folder (3)/funny5.jpg", text: "Your 'I'm done with you' face." },
+            { src: "New folder (3)/funny6.jpg", text: "Sleeping beauty (drool included)." },
+            { src: "New folder (3)/funny7.jpg", text: "The moment before disaster struck." }
+        ];
+
+        function initFunnySurprise() {
+            const container = document.getElementById("funny-grid-container");
+            container.innerHTML = "";
+            funnyMoments.forEach((item, index) => {
+                const div = document.createElement("div");
+                div.className = "funny-item";
+                div.innerHTML = "<span>❓</span>";
+                div.onclick = () => showFunnyPhoto(index);
+                container.appendChild(div);
+                // Animate entry
+                gsap.fromTo(div, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, delay: index * 0.1 });
+            });
+        }
+
+        function showFunnyPhoto(index) {
+            const item = funnyMoments[index];
+            const modal = document.getElementById("funny-modal");
+            const img = document.getElementById("funny-modal-img");
+            const txt = document.getElementById("funny-modal-text");
+
+            img.src = item.src;
+            // Fallback if image fails
+            img.onerror = function() { this.src = 'https://source.unsplash.com/random/300x400/?funny,face&sig=' + index; };
+            txt.innerText = item.text;
+
+            modal.style.pointerEvents = "auto";
+            gsap.to(modal, { opacity: 1, duration: 0.5 });
+            gsap.fromTo(".funny-polaroid", { scale: 0.5, rotation: -10 }, { scale: 1, rotation: -2, duration: 0.5, ease: "back.out(1.7)" });
+        }
+
+        function closeFunnyModal() {
+            const modal = document.getElementById("funny-modal");
+            modal.style.pointerEvents = "none";
+            gsap.to(modal, { opacity: 0, duration: 0.5 });
+        }
+
         function openLetter() { gsap.to("#letter-closed", {rotationX:180, opacity:0, duration:0.8, onComplete:()=>{document.getElementById("letter-closed").style.display="none"; document.getElementById("letter-content").classList.remove("hidden"); document.getElementById("letter-content").classList.add("flex"); gsap.fromTo("#letter-content", {y:50, opacity:0}, {y:0, opacity:1, duration:1});}}); }
         
-        // FULL PROMISES RESTORED
         let pIdx=0; 
         const promises = [
             { title: "To Stay", desc: "I promise to stay even when it’s difficult.", img: "New folder (3)/promise1.jpg" },
@@ -555,7 +705,6 @@
         }
         function nextPromise() { if(pIdx<promises.length-1) { pIdx++; loadPromise(pIdx); if(pIdx===promises.length-1) { const b=document.getElementById("promise-next-btn"); b.innerText="Finish"; b.onclick=nextChapter; }}}
         
-        // --- VIDEO CONTROL FOR OLD VIDEO ---
         function initVideoLogic() { 
             const v = document.getElementById('memory-video'); 
             if(v) { 
@@ -569,40 +718,29 @@
             nextChapter(); 
         }
 
-        // --- NEW LOVE CHECK LOGIC ---
         function handleLoveNo() {
             const msg = document.getElementById("plea-msg");
             msg.innerText = "Please click the option yes 🥺";
             msg.style.opacity = 1;
-            // Shake the No button
             gsap.to("#love-no-btn", {x: 5, duration: 0.1, yoyo: true, repeat: 5});
         }
 
         function handleLoveYes() {
-            // Mute Background music gently
             gsap.to(audio, {volume: 0, duration: 1});
-
-            // Show Overlay
             const overlay = document.getElementById("love-video-overlay");
             const vid = document.getElementById("final-love-video");
-            
             overlay.classList.remove("hidden");
             gsap.to(overlay, {opacity: 1, duration: 1});
-            
             vid.play();
-            
-            // Auto advance when video ends
             vid.onended = closeLoveVideo;
         }
 
         function closeLoveVideo() {
             const overlay = document.getElementById("love-video-overlay");
             const vid = document.getElementById("final-love-video");
-            
             vid.pause();
             gsap.to(overlay, {opacity: 0, duration: 1, onComplete: () => {
                 overlay.classList.add("hidden");
-                // Restore music? Optional.
                 gsap.to(audio, {volume: 0.5, duration: 1});
                 nextChapter();
             }});
@@ -611,49 +749,15 @@
         let candlesOut=0; function blowCandle(el){ const f=el.querySelector('.flame'); if(f && !f.classList.contains('out')){ f.classList.add('out'); candlesOut++; if(candlesOut===3) checkCake(); }}
         function checkCake() { if(candlesOut===3){ confetti({particleCount:150, spread:100, origin:{y:0.6}}); nextChapter(); } }
 
-        // --- 7. FINALE: PHOTO + SIDE FLOWERS ---
         function triggerFinale() {
-            // 1. Show Sister Photo with a "Pop" effect
-            gsap.to("#sister-container", {
-                opacity: 1,
-                scale: 1,
-                duration: 1.5,
-                ease: "back.out(1.7)"
-            });
-
-            // 2. Text Animation
-            gsap.to("#typewriter", {
-                text: "The most beautiful flower in my garden. Happy Birthday, Nayanika.",
-                duration: 4,
-                delay: 1,
-                ease: "none"
-            });
-
-            // 3. Flower/Confetti Shower from SIDES
+            gsap.to("#sister-container", { opacity: 1, scale: 1, duration: 1.5, ease: "back.out(1.7)" });
+            gsap.to("#typewriter", { text: "The most beautiful flower in my garden. Happy Birthday, Nayanika.", duration: 4, delay: 1, ease: "none" });
             const duration = 5 * 1000;
             const end = Date.now() + duration;
-
             (function frame() {
-                // Left side throw
-                confetti({
-                    particleCount: 5,
-                    angle: 60,
-                    spread: 55,
-                    origin: { x: 0, y: 0.6 },
-                    colors: ['#ff0000', '#ffa500', '#ff69b4', '#ffffff']
-                });
-                // Right side throw
-                confetti({
-                    particleCount: 5,
-                    angle: 120,
-                    spread: 55,
-                    origin: { x: 1, y: 0.6 },
-                    colors: ['#ff0000', '#ffa500', '#ff69b4', '#ffffff']
-                });
-
-                if (Date.now() < end) {
-                    requestAnimationFrame(frame);
-                }
+                confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0, y: 0.6 }, colors: ['#ff0000', '#ffa500', '#ff69b4', '#ffffff'] });
+                confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1, y: 0.6 }, colors: ['#ff0000', '#ffa500', '#ff69b4', '#ffffff'] });
+                if (Date.now() < end) { requestAnimationFrame(frame); }
             }());
         }
 
