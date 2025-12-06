@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>System_Boot_Bordi.exe</title> 
     
-    <!-- Fonts -->
+    <!-- Fonts & Libraries (Keep exactly as before) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&family=Great+Vibes&family=Lato:wght@300;400&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-    
-    <!-- Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
@@ -18,124 +16,62 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
+    <!-- Tailwind Config (Same as before) -->
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        'royal': ['Cinzel', 'serif'],
-                        'script': ['Great Vibes', 'cursive'],
-                        'body': ['Lato', 'sans-serif'],
-                        'tech': ['Share Tech Mono', 'monospace'],
-                    },
-                    colors: {
-                        'deep-void': '#050203',
-                        'rose-gold': '#e11d48',
-                        'pale-gold': '#fce7f3'
-                    }
-                }
-            }
-        }
+        tailwind.config = { theme: { extend: { fontFamily: { 'royal': ['Cinzel', 'serif'], 'script': ['Great Vibes', 'cursive'], 'body': ['Lato', 'sans-serif'], 'tech': ['Share Tech Mono', 'monospace'], }, colors: { 'deep-void': '#050203', 'rose-gold': '#e11d48', 'pale-gold': '#fce7f3' } } } }
     </script>
 
+    <!-- Styles (Same as before) -->
     <style>
-        /* --- CORE AESTHETICS --- */
         body { margin: 0; overflow: hidden; background-color: #050203; font-family: 'Lato', sans-serif; color: #fce7f3; user-select: none; -webkit-tap-highlight-color: transparent; }
         .vignette { position: fixed; inset: 0; pointer-events: none; z-index: 2; background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.8) 100%); }
         .noise { position: fixed; inset: 0; pointer-events: none; z-index: 3; opacity: 0.04; background-image: url("https://grainy-gradients.vercel.app/noise.svg"); filter: contrast(150%) brightness(100%); }
-        
-        /* ANIMATIONS */
         .glitch-active { animation: glitch-anim 0.2s infinite; }
         @keyframes glitch-anim { 0% { transform: translate(0) } 20% { transform: translate(-2px, 2px) } 40% { transform: translate(-2px, -2px) } 60% { transform: translate(2px, 2px) } 80% { transform: translate(2px, -2px) } 100% { transform: translate(0) } }
         .breathe { animation: breathe 6s ease-in-out infinite; }
         @keyframes breathe { 0%, 100% { opacity: 0.7; transform: scale(1); } 50% { opacity: 1; transform: scale(1.05); } }
-
-        /* PANELS */
         .glass-panel { width: 100%; height: 100vh; position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .chapter-container { position: absolute; inset: 0; padding: 1.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; visibility: hidden; text-align: center; z-index: 10; pointer-events: none; transition: opacity 0.5s ease; }
         .chapter-active { opacity: 1; visibility: visible; z-index: 20; pointer-events: auto; }
-
-        /* BUTTONS */
         .majestic-btn { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: white; padding: 14px 30px; font-family: 'Cinzel', serif; font-size: 0.8rem; letter-spacing: 3px; text-transform: uppercase; transition: all 0.6s ease; margin-top: 30px; cursor: pointer; position: relative; overflow: hidden; pointer-events: auto; z-index: 50; border-radius: 4px; }
         .majestic-btn:hover { background: rgba(225, 29, 72, 0.1); border-color: #fda4af; box-shadow: 0 0 40px rgba(225, 29, 72, 0.3); }
-        .tech-btn { font-family: 'Share Tech Mono', monospace; background: rgba(0, 255, 0, 0.1); border: 1px solid #0f0; color: #0f0; padding: 10px 25px; text-transform: uppercase; cursor: pointer; letter-spacing: 2px; transition: all 0.3s; margin-top: 20px; }
+        .tech-btn { font-family: 'Share Tech Mono', monospace; background: rgba(0, 255, 0, 0.1); border: 1px solid #0f0; color: #0f0; padding: 10px 25px; text-transform: uppercase; cursor: pointer; letter-spacing: 2px; transition: all 0.3s; margin-top: 20px; font-size: 0.9rem; }
         .tech-btn:hover { background: #0f0; color: black; box-shadow: 0 0 15px #0f0; }
-        .tech-btn.disabled { border-color: #333; color: #555; background: transparent; pointer-events: none; box-shadow: none; }
-
-        /* SPECIAL ELEMENTS */
         .gold-text { background: linear-gradient(to bottom, #fff 0%, #fbcfe8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 0 30px rgba(255,192,203,0.3); }
         .smile-sensor { width: 100px; height: 100px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 3rem; cursor: pointer; transition: all 0.5s; animation: pulse-border 2s infinite; }
         .smile-sensor:hover, .smile-sensor:active { background: rgba(225, 29, 72, 0.2); box-shadow: 0 0 50px #e11d48; border-color: #e11d48; transform: scale(1.1); }
         @keyframes pulse-border { 0% { box-shadow: 0 0 0 0 rgba(255,255,255,0.2); } 70% { box-shadow: 0 0 0 20px rgba(255,255,255,0); } 100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); } }
-
         .heart-container { cursor: pointer; transition: transform 0.3s; width: 150px; height: 150px; }
         .heart-path { transition: all 1s ease; fill: #330510; stroke: #e11d48; stroke-width: 2; }
         .healed .heart-path { fill: #e11d48; stroke: #fff; filter: drop-shadow(0 0 20px #e11d48); }
         .crack { transition: all 1s ease; stroke: #fff; stroke-width: 3; opacity: 0.8; }
         .healed .crack { opacity: 0; stroke-width: 0; }
-
         .confession-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; max-width: 500px; width: 100%; pointer-events: auto; }
         .confession-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 20px; min-height: 100px; display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; overflow: hidden; border-radius: 8px; text-align: center; }
         .confession-blur { position: absolute; inset: 0; background: rgba(5, 2, 3, 0.9); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; transition: opacity 0.5s; }
         .confession-card.revealed .confession-blur { opacity: 0; pointer-events: none; }
-
         .hand { font-size: 5rem; position: absolute; filter: drop-shadow(0 0 10px rgba(255,255,255,0.3)); user-select: none; }
         #my-hand { bottom: 20%; right: 20%; opacity: 0.5; }
         #her-hand { top: 20%; left: 20%; cursor: grab; z-index: 50; }
         #her-hand:active { cursor: grabbing; transform: scale(1.1); }
-        
         .polaroid { background: #fff; padding: 10px 10px 25px 10px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); }
-        
         #puzzle-wrapper { position: relative; width: 80vw; max-width: 300px; aspect-ratio: 3/4; margin: 0 auto; }
         #puzzle-container { width: 100%; height: 100%; position: relative; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); }
-        .puzzle-piece { 
-            position: absolute; 
-            background-image: url('New folder (3)/mylove1.jpg'); 
-            background-repeat: no-repeat; 
-            background-size: 300% 300%; 
-            cursor: pointer; 
-            border: 1px solid rgba(255,255,255,0.3); 
-            box-shadow: 0 0 10px rgba(225, 29, 72, 0.5); 
-            pointer-events: auto; 
-            z-index: 100; 
-        }
+        .puzzle-piece { position: absolute; background-image: url('New folder (3)/mylove1.jpg'); background-repeat: no-repeat; background-size: 300% 300%; cursor: pointer; border: 1px solid rgba(255,255,255,0.3); box-shadow: 0 0 10px rgba(225, 29, 72, 0.5); pointer-events: auto; z-index: 100; }
         .piece-solved { border: none; box-shadow: none; pointer-events: none; z-index: 1; }
-
         .funny-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; max-width: 500px; pointer-events: auto; }
-        .funny-item { 
-            background: #111; border: 1px solid #333; aspect-ratio: 1; 
-            display: flex; align-items: center; justify-content: center; 
-            cursor: pointer; transition: 0.3s; position: relative; overflow: hidden;
-            border-radius: 8px;
-        }
+        .funny-item { background: #111; border: 1px solid #333; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; position: relative; overflow: hidden; border-radius: 8px; }
         .funny-item:hover { transform: scale(1.05); border-color: #e11d48; }
         .funny-item span { font-size: 2rem; }
-        .funny-modal {
-            position: absolute; inset: 0; background: rgba(0,0,0,0.95); z-index: 60;
-            display: flex; flex-col; align-items: center; justify-content: center;
-            opacity: 0; pointer-events: none; padding: 20px;
-        }
-        .funny-polaroid {
-            background: white; padding: 15px 15px 50px 15px; transform: rotate(-2deg);
-            max-width: 300px; box-shadow: 0 0 50px rgba(0,0,0,0.5);
-            animation: float 3s infinite ease-in-out;
-        }
-        .funny-caption {
-            font-family: 'Great Vibes', cursive; color: #333; font-size: 1.5rem;
-            position: absolute; bottom: 10px; width: 100%; text-align: center; left: 0;
-        }
-
+        .funny-modal { position: absolute; inset: 0; background: rgba(0,0,0,0.95); z-index: 60; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; pointer-events: none; padding: 20px; }
+        .funny-polaroid { background: white; padding: 15px 15px 50px 15px; transform: rotate(-2deg); max-width: 300px; box-shadow: 0 0 50px rgba(0,0,0,0.5); animation: float 3s infinite ease-in-out; }
+        .funny-caption { font-family: 'Great Vibes', cursive; color: #333; font-size: 1.5rem; position: absolute; bottom: 10px; width: 100%; text-align: center; left: 0; }
         .cake-container { position: relative; cursor: pointer; transform: scale(1.2); pointer-events: auto; margin-top: 50px; }
         .flame { width: 12px; height: 20px; background: #fbbf24; border-radius: 50% 50% 20% 20%; position: absolute; top: -25px; left: 50%; transform: translateX(-50%); box-shadow: 0 0 20px #f59e0b, 0 0 40px #b45309; animation: flicker 0.8s infinite alternate; }
         .flame.out { animation: none; opacity: 0; transform: translateX(-50%) scale(0); transition: 0.5s; }
         @keyframes flicker { 0% { opacity: 1; transform: translateX(-50%) scale(1); } 100% { opacity: 0.8; transform: translateX(-50%) scale(1.1); } }
-        
-        .scanner-line { width: 100%; height: 2px; background: #0f0; box-shadow: 0 0 10px #0f0; position: absolute; top: 0; animation: scan 2s infinite linear; }
-        @keyframes scan { 0% {top: 0} 50% {top: 100%} 100% {top: 0} }
-        
         .custom-scroll::-webkit-scrollbar { width: 3px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #be123c; border-radius: 10px; }
-        
         .petal-text { position: absolute; pointer-events: none; font-family: 'Great Vibes', cursive; color: #fda4af; font-size: 1.5rem; text-shadow: 0 0 10px rgba(0,0,0,0.8); animation: floatUpFade 3s forwards; z-index: 999; }
         @keyframes floatUpFade { 0%{opacity:1; transform:translateY(0);} 100%{opacity:0; transform:translateY(-150px);} }
     </style>
@@ -152,96 +88,99 @@
     <!-- LOADER -->
     <div id="loader" class="fixed inset-0 bg-black z-[100] flex flex-col items-center justify-center font-tech text-green-500">
         <div class="w-24 h-24 border-2 border-green-500 rounded-full border-t-transparent animate-spin mb-4"></div>
-        <p class="tracking-widest">LOADING DATA...</p>
+        <p class="tracking-widest">BOOTING SYSTEM...</p>
+        <p class="text-xs text-green-700 mt-2">Checking Biometrics...</p>
     </div>
 
-    <!-- ==================== PRANK STAGE ==================== -->
-    <div id="prank-stage" class="fixed inset-0 z-[60] bg-black flex flex-col items-center justify-center hidden">
-        <!-- Prank 1 -->
+    <!-- ==================== UPGRADED PRANK STAGE ==================== -->
+    <div id="prank-stage" class="fixed inset-0 z-[60] bg-black flex flex-col items-center justify-center font-tech hidden">
+        
+        <!-- Prank 1: Identity (Typing) -->
         <div id="prank-1" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
-            <p class="font-tech text-green-500/50 text-xs mb-4 tracking-[0.5em]">FILE: BORDI_BDAY_FINAL.EXE</p>
-            <h1 class="text-5xl md:text-7xl font-royal text-green-100 mb-6 tracking-tight">Happy Birthday<br><span class="text-green-400">Bordi</span></h1>
-            <p class="text-white/60 font-body mb-12">"To my annoying but lovable sister. Hope you like this site."</p>
-            <button onclick="nextPrank(2)" class="tech-btn">Initialize Surprise</button>
+            <h1 class="text-3xl text-green-500 mb-6">BIOMETRIC LOGIN</h1>
+            <p class="text-green-800 mb-4 text-xs">RESTRICTED AREA: VIP ONLY</p>
+            <div class="bg-gray-900 border border-green-800 p-6 rounded-lg w-full max-w-sm">
+                <p class="text-green-400 text-left mb-2">> ENTER NAME:</p>
+                <input type="text" id="name-input" oninput="forceTyping(this)" class="w-full bg-black border border-green-500 text-green-500 p-2 outline-none mb-4 uppercase" placeholder="TYPE HERE...">
+                <button onclick="nextPrank(2)" class="tech-btn w-full">VERIFY</button>
+            </div>
         </div>
-        <!-- Prank 2 -->
+
+        <!-- Prank 2: Age Scan -->
         <div id="prank-2" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center opacity-0 pointer-events-none transform scale-95">
-            <h2 class="font-tech text-2xl text-green-400 mb-8">USER AGREEMENT</h2>
-            <div class="bg-green-900/10 border border-green-500/30 p-6 rounded text-left mb-8 max-w-md">
-                <p class="font-tech text-green-100 text-sm mb-4">I hereby acknowledge that my brother is:</p>
-                <div class="flex items-center gap-3">
-                    <input type="checkbox" id="contract-check" class="w-4 h-4 accent-green-500" onchange="checkContract()">
-                    <label for="contract-check" class="font-tech text-green-300 text-sm">Mom's Favorite Child</label>
-                </div>
+            <h2 class="text-2xl text-green-500 mb-8">BIOLOGICAL SCAN</h2>
+            <div class="w-64 h-64 border-2 border-green-500/30 relative flex items-center justify-center bg-green-900/10 rounded-full mb-6">
+                <div class="absolute inset-0 border-t-2 border-green-500 animate-spin rounded-full"></div>
+                <span class="text-4xl">🧬</span>
             </div>
-            <button id="contract-btn" onclick="nextPrank(3)" class="tech-btn disabled">I Agree</button>
+            <div class="text-left w-64 space-y-2">
+                <p class="text-green-300">> Analyzing DNA...</p>
+                <p id="age-text" class="text-green-300 opacity-0">> Calculated Age: <span class="text-red-500 font-bold">75 YEARS</span></p>
+                <p id="status-text" class="text-green-300 opacity-0">> Status: <span class="text-yellow-500">GRANDMA MODE</span></p>
+            </div>
+            <button id="btn-2" onclick="nextPrank(3)" class="tech-btn mt-8 opacity-0 pointer-events-none">ACCEPT FATE</button>
         </div>
-        <!-- Prank 3 -->
+
+        <!-- NEW PRANK 3: Attitude Scanner -->
         <div id="prank-3" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center opacity-0 pointer-events-none transform scale-95">
-            <h2 class="font-tech text-2xl text-green-400 mb-8">SYSTEM DIAGNOSTIC</h2>
-            <div class="w-full max-w-md bg-gray-900 border border-green-500/30 p-4 mb-6">
-                <p class="text-left font-tech text-green-500 mb-2">> Scanning Brain Cells...</p>
-                <div class="w-full h-4 bg-gray-800 rounded overflow-hidden">
-                    <div id="iq-bar" class="h-full bg-green-500 w-0 transition-all duration-1000"></div>
-                </div>
-                <p id="iq-result" class="text-right font-tech text-red-500 mt-2 opacity-0">ERROR: 404 NOT FOUND</p>
+            <h2 class="text-2xl text-green-500 mb-8">ATTITUDE ANALYSIS</h2>
+            <p class="text-green-300 mb-2">Scanning for Sass Levels...</p>
+            <div class="w-64 h-6 bg-gray-800 rounded border border-green-500 overflow-hidden relative mb-4">
+                <div id="sass-bar" class="h-full bg-red-500 w-0"></div>
             </div>
-            <button id="iq-btn" onclick="nextPrank(4)" class="tech-btn opacity-50 pointer-events-none">Analyze Result</button>
+            <p id="sass-msg" class="text-red-500 text-xl font-bold opacity-0">⚠️ CRITICAL LEVELS DETECTED</p>
+            <p id="sass-sub" class="text-green-800 text-xs mt-2 opacity-0">Recommendation: Give chocolate immediately.</p>
+            <button id="btn-3" onclick="nextPrank(4)" class="tech-btn mt-6 opacity-0 pointer-events-none">ADMIT IT</button>
         </div>
-        <!-- Prank 4 -->
+
+        <!-- NEW PRANK 4: Height Verification -->
         <div id="prank-4" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center opacity-0 pointer-events-none transform scale-95">
-            <h2 class="font-tech text-2xl text-green-400 mb-8">SELECT YOUR GIFT</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 w-full max-w-2xl">
-                <div class="border border-gray-700 bg-gray-900/50 p-4 rounded opacity-50"><span class="text-3xl">🎁</span><p class="font-tech text-xs mt-2">iPhone 15 (Budget Exceeded)</p></div>
-                <div class="border border-gray-700 bg-gray-900/50 p-4 rounded opacity-50"><span class="text-3xl">💰</span><p class="font-tech text-xs mt-2">Cash (Wallet Empty)</p></div>
-                <div class="border border-green-500 bg-green-900/20 p-4 rounded cursor-pointer hover:bg-green-900/40" onclick="nextPrank(5)"><span class="text-3xl">✋</span><p class="font-tech text-xs mt-2 text-green-300">High Five (Available)</p></div>
+            <h2 class="text-2xl text-green-500 mb-8">PHYSICAL DIMENSIONS</h2>
+            <div class="border border-green-500 p-8 relative w-64 h-64 flex items-end justify-center">
+                <div class="absolute top-0 w-full border-t border-green-900 text-xs text-green-900">6 ft</div>
+                <div class="absolute top-1/2 w-full border-t border-green-900 text-xs text-green-900">3 ft</div>
+                <div id="height-bar" class="w-20 bg-green-500 mx-auto transition-all duration-1000" style="height: 0%"></div>
             </div>
+            <p id="height-result" class="text-yellow-500 mt-4 text-xl font-bold opacity-0"></p>
+            <button id="btn-4" onclick="nextPrank(5)" class="tech-btn mt-6 opacity-0 pointer-events-none">CONTINUE (SHORTY)</button>
         </div>
-        <!-- Prank 5 -->
+
+        <!-- NEW PRANK 5: System Download (Brain Cells) -->
         <div id="prank-5" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center opacity-0 pointer-events-none transform scale-95">
-            <h2 class="font-tech text-2xl text-green-400 mb-4">MANDATORY TAX</h2>
-            <p class="font-tech text-green-100/70 mb-6 text-sm">To proceed, you must pay the "Sister Tax".</p>
-            <div class="flex flex-col gap-4 items-center">
-                <input type="number" id="tax-input" placeholder="Enter Amount ($)" class="bg-black border border-green-500 text-green-500 p-2 font-tech text-center w-64 outline-none">
-                <p id="tax-msg" class="font-tech text-red-400 text-xs h-4"></p>
-                <button onclick="checkTax()" class="tech-btn">PAY NOW</button>
+            <h2 class="text-2xl text-green-500 mb-6">SYSTEM UPDATE</h2>
+            <p class="text-green-300 animate-pulse">> Downloading: <span class="text-white">BrainCells.exe</span></p>
+            <div class="text-left w-64 mt-4 text-xs font-mono space-y-1">
+                <p id="dl-line-1" class="opacity-0">> Connecting to server...</p>
+                <p id="dl-line-2" class="opacity-0 text-red-500">> ERROR: Connection Failed.</p>
+                <p id="dl-line-3" class="opacity-0 text-red-500">> REASON: Storage Full (Too many cute photos).</p>
             </div>
+            <button id="btn-5" onclick="nextPrank(6)" class="tech-btn mt-8 opacity-0 pointer-events-none">SKIP DOWNLOAD</button>
         </div>
-        <!-- Prank 6 -->
+
+        <!-- Prank 6: IQ Test (Previously 3) -->
         <div id="prank-6" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center opacity-0 pointer-events-none transform scale-95">
-            <h2 class="font-tech text-2xl text-green-400 mb-4">AGE VERIFICATION</h2>
-            <div class="font-tech text-green-100 space-y-2 mb-8 text-left">
-                <p>> Analyzing wrinkles...</p>
-                <p>> Result: <span class="text-red-400">GETTING OLD.</span></p>
-                <p class="text-green-300 mt-4">>> SUBJECT CONFIRMED.</p>
+            <h2 class="text-2xl text-green-500 mb-8">INTELLIGENCE CHECK</h2>
+            <p class="text-green-200 mb-6">Solving complex equation...</p>
+            <div class="text-2xl mb-8 font-bold">
+                <span id="math-q">2 + 2 = ?</span>
             </div>
-            <button onclick="nextPrank(7)" class="tech-btn">Proceed</button>
+            <div class="grid grid-cols-2 gap-4 w-64">
+                <button onclick="failIQ()" class="bg-gray-800 border border-gray-600 text-white p-3 hover:bg-gray-700">4</button>
+                <button onclick="passIQ()" class="bg-gray-800 border border-gray-600 text-white p-3 hover:bg-gray-700">5</button>
+            </div>
+            <p id="iq-msg" class="text-red-500 mt-6 h-6 text-sm"></p>
         </div>
-        <!-- Prank 7 -->
+
+        <!-- Prank 7: The Finale (Favorite Child) -->
         <div id="prank-7" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center opacity-0 pointer-events-none transform scale-95">
-            <h2 class="font-tech text-2xl text-green-400 mb-8">FINAL SECURITY QUESTION</h2>
-            <p class="font-tech text-white mb-8">Who is the smarter sibling?</p>
+            <h2 class="text-2xl text-red-500 mb-6">FINAL SECURITY QUESTION</h2>
+            <p class="text-white mb-8">Who is the favorite child?</p>
             <div class="relative w-full h-40 flex justify-center items-center gap-10">
-                <button id="btn-me" class="tech-btn bg-red-900/20 border-red-500 text-red-500 hover:shadow-none transition-none" onmouseover="moveButton(this)" onclick="moveButton(this)">ME (Nayanika)</button>
-                <button onclick="nextPrank(8)" class="tech-btn border-green-500 text-green-500">MY BROTHER</button>
+                <button id="btn-me" class="tech-btn bg-red-900/20 border-red-500 text-red-500 hover:shadow-none transition-none" onmouseover="moveButton(this)" onclick="moveButton(this)">ME (NAYANIKA)</button>
+                <button onclick="triggerGlitch()" class="tech-btn border-green-500 text-green-500">MY BROTHER</button>
             </div>
-        </div>
-        <!-- Prank 8 -->
-        <div id="prank-8" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center opacity-0 pointer-events-none transform scale-95">
-            <div class="w-64 h-64 border-2 border-green-500/50 relative mb-8 flex items-center justify-center overflow-hidden bg-green-900/10 rounded-lg">
-                <div id="scanner-bar" class="scanner-line hidden"></div>
-                <div id="fingerprint-icon" class="text-6xl text-green-500/50">🖐️</div>
-                <p id="scan-status" class="absolute bottom-2 font-tech text-xs text-green-400">WAITING...</p>
-            </div>
-            <button id="scan-btn" onclick="triggerPrankFail()" class="tech-btn">SCAN BIOMETRICS</button>
-        </div>
-        <!-- Glitch Overlay -->
-        <div id="glitch-overlay" class="absolute inset-0 bg-red-900/20 hidden flex-col items-center justify-center z-50 pointer-events-none">
-            <h1 class="text-6xl md:text-9xl font-black text-red-600 tracking-tighter opacity-50">ERROR</h1>
-            <p id="glitch-text" class="font-tech text-red-500 bg-black px-2 mt-4 text-xl">SUBJECT MISMATCH</p>
         </div>
     </div>
-    <!-- ==================== END PRANK ==================== -->
 
     <!-- REAL INTRO -->
     <div id="intro-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black transition-opacity duration-1000 hidden">
@@ -375,12 +314,11 @@
             </div>
         </div>
 
-        <!-- 11: OLD VIDEO (REMEMBER THIS MOMENT) -->
+        <!-- 11: OLD VIDEO -->
         <div id="chap-11" class="chapter-container">
             <h2 class="text-3xl font-royal text-white mb-8">Remember This Moment of Us</h2>
             <div class="relative p-2 border border-white/20 rounded-lg bg-white/5 pointer-events-auto">
                 <div class="relative w-full max-w-2xl aspect-video overflow-hidden rounded">
-                    <!-- OLD VIDEO FILE (Preload metadata only) -->
                     <video id="memory-video" class="w-full h-full object-cover" controls preload="metadata">
                         <source src="New folder (3)/video.mp4" type="video/mp4">
                     </video>
@@ -393,24 +331,18 @@
         <div id="chap-12" class="chapter-container">
             <h2 class="text-3xl font-royal text-white mb-8">One Last Question...</h2>
             <h1 class="text-5xl md:text-7xl font-script text-pink-400 mb-12">Do you love me?</h1>
-            
             <div class="flex gap-8 relative z-50 pointer-events-auto">
                 <button onclick="handleLoveYes()" class="px-8 py-3 bg-green-900/40 border border-green-500 text-green-300 font-royal rounded hover:bg-green-800/60 hover:text-white transition duration-300">YES</button>
                 <button id="love-no-btn" onclick="handleLoveNo()" class="px-8 py-3 bg-red-900/40 border border-red-500 text-red-300 font-royal rounded hover:bg-red-800/60 hover:text-white transition duration-300">NO</button>
             </div>
-
             <p id="plea-msg" class="text-rose-400 font-tech mt-8 opacity-0 transition-opacity duration-300 text-lg"></p>
         </div>
 
-        <!-- 13: NEW FUNNY PHOTOS SURPRISE (INTERACTIVE) -->
+        <!-- 13: FUNNY PHOTOS -->
         <div id="chap-13" class="chapter-container">
             <h2 class="text-3xl font-royal text-white mb-2">I have a surprise for you</h2>
             <p class="text-pink-300 font-script text-xl mb-6">"I kept these surprises for this day"</p>
-            
-            <!-- Grid of Cards -->
             <div id="funny-grid-container" class="funny-grid"></div>
-
-            <!-- Modal for Focused View -->
             <div id="funny-modal" class="funny-modal" onclick="closeFunnyModal()">
                 <div class="funny-polaroid" onclick="event.stopPropagation()">
                     <div class="w-full aspect-[3/4] overflow-hidden bg-gray-200">
@@ -419,7 +351,6 @@
                     <div class="funny-caption" id="funny-modal-text"></div>
                 </div>
             </div>
-
             <button onclick="nextChapter()" class="majestic-btn mt-8">Proceed</button>
         </div>
 
@@ -427,17 +358,13 @@
         <div id="chap-14" class="chapter-container">
             <h2 class="text-3xl font-royal text-white mb-8">Honest Answer Required</h2>
             <h1 class="text-4xl md:text-6xl font-script text-pink-400 mb-12">Did you laugh seeing these? 😂</h1>
-            
             <div class="relative w-full h-40 flex justify-center items-center gap-10 pointer-events-auto">
-                <!-- YES Button -->
                 <button onclick="nextChapter()" class="px-8 py-3 bg-green-900/40 border border-green-500 text-green-300 font-royal rounded hover:bg-green-800/60 hover:text-white transition duration-300 z-10">YES</button>
-                
-                <!-- NO Button (Runaway) -->
                 <button id="laugh-no-btn" onmouseover="moveLaughNoBtn()" onclick="moveLaughNoBtn()" class="px-8 py-3 bg-red-900/40 border border-red-500 text-red-300 font-royal rounded transition duration-300">NO</button>
             </div>
         </div>
 
-        <!-- 15: NEW - CARTOON TEASE -->
+        <!-- 15: CARTOON TEASE -->
         <div id="chap-15" class="chapter-container">
             <h2 class="text-3xl font-royal text-white mb-6">Just Kidding...</h2>
             <h1 class="text-4xl md:text-6xl font-tech text-green-400 mb-8">I know you look like a cartoon 🤡</h1>
@@ -445,17 +372,15 @@
             <button onclick="nextChapter()" class="majestic-btn">But honestly...</button>
         </div>
 
-        <!-- 16: NEW - CUTEST LOVE -->
+        <!-- 16: CUTEST LOVE -->
         <div id="chap-16" class="chapter-container">
              <h2 class="text-3xl font-royal text-white mb-8">One Last Thing...</h2>
-             <h1 class="text-4xl md:text-6xl font-script text-pink-300 leading-tight mb-8">
-                 "But you are the cutest love of mine, <span class="text-rose-500">Sunu</span>"
-             </h1>
-             <div class="text-6xl animate-bounce">🥺❤️</div>
+             <h1 class="text-4xl md:text-6xl font-script text-pink-300 leading-tight mb-8">"But you are the cutest love of mine, <span class="text-rose-500">Sunu</span>"</h1>
+             <div class="text-6xl animate-bounce">🥺❤</div>
              <button onclick="nextChapter()" class="majestic-btn mt-10">Celebration Time</button>
         </div>
 
-        <!-- 17: CAKE (RENUMBERED) -->
+        <!-- 17: CAKE -->
         <div id="chap-17" class="chapter-container">
             <h2 class="text-4xl font-royal gold-text mb-2 text-center">Happy 17th Birthday</h2>
             <div class="cake-container">
@@ -468,21 +393,15 @@
             </div>
         </div>
 
-        <!-- 18: FINALE (RENUMBERED) -->
+        <!-- 18: FINALE -->
         <div id="chap-18" class="chapter-container">
             <div class="relative w-full h-full flex flex-col items-center justify-center">
-                <!-- Sister Photo Container -->
                 <div id="sister-container" class="relative z-10 mb-8 opacity-0 transform scale-50">
-                    <img src="New folder (3)/surprise.jpg" 
-                         onerror="this.src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=600'" 
-                         class="w-64 md:w-96 rounded-lg border-4 border-rose-200 shadow-[0_0_50px_rgba(225,29,72,0.6)] object-cover">
+                    <img src="New folder (3)/surprise.jpg" onerror="this.src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=600'" class="w-64 md:w-96 rounded-lg border-4 border-rose-200 shadow-[0_0_50px_rgba(225,29,72,0.6)] object-cover">
                 </div>
-                
-                <!-- Final Text -->
                 <h1 id="typewriter" class="text-2xl md:text-4xl text-white font-royal text-center leading-relaxed h-24 px-4 drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]"></h1>
             </div>
         </div>
-
     </div>
 
     <!-- FULL SCREEN LOVE VIDEO OVERLAY -->
@@ -495,15 +414,18 @@
 
     <!-- MUTE CONTROL -->
     <div onclick="toggleMusic()" class="fixed bottom-6 right-6 text-white/40 hover:text-white cursor-pointer z-50 transition p-3 bg-black/20 rounded-full border border-white/5 backdrop-blur-md">
-        <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M11.536 14.01A8.473 8.473 0 0 1 8 10a8.473 8.473 0 0 1 3.536-4.01C12.446 5.483 13 4.81 13 4v6c0 .81-.554 1.483-1.464 1.99z"/><path d="M7.34 1.635a2.69 2.69 0 0 1 3.296 1.033 9.4 9.4 0 0 0-3.322 3.252 2.69 2.69 0 0 1-2.029-4.223 2.69 2.69 0 0 1 2.055-.062z"/></svg>
+        <svg width="20" height="20" fill="currentColor" viewBox="0 16 16"><path d="M11.536 14.01A8.473 8.473 0 0 1 8 10a8.473 8.473 0 0 1 3.536-4.01C12.446 5.483 13 4.81 13 4v6c0 .81-.554 1.483-1.464 1.99z"/><path d="M7.34 1.635a2.69 2.69 0 0 1 3.296 1.033 9.4 9.4 0 0 0-3.322 3.252 2.69 2.69 0 0 1-2.029-4.223 2.69 2.69 0 0 1 2.055-.062z"/></svg>
     </div>
 
     <script>
-        gsap.registerPlugin(TextPlugin, Draggable);
+        // Ensure scripts are loaded or provide mock objects
+        if(typeof gsap === 'undefined') { console.warn("GSAP not loaded"); }
+        else { gsap.registerPlugin(TextPlugin, Draggable); }
 
         // --- 1. BACKGROUND ---
         function initThree() {
             try {
+                if(typeof THREE === 'undefined') return;
                 const canvas = document.getElementById('bg-canvas');
                 if(!canvas) return;
                 const scene = new THREE.Scene(); scene.fog = new THREE.FogExp2(0x050203, 0.002);
@@ -522,9 +444,7 @@
                 function animate() { requestAnimationFrame(animate); starField.rotation.x += 0.0003; starField.rotation.y += 0.0003; renderer.render(scene, camera); }
                 animate();
                 window.addEventListener('resize', () => { camera.aspect = window.innerWidth/window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
-            } catch(e) {
-                console.log("3D Background Error (Ignore if low end device):", e);
-            }
+            } catch(e) { console.log("3D Error", e); }
         }
 
         // --- 2. AUDIO CONTROL ---
@@ -536,101 +456,145 @@
             musicPlaying = !musicPlaying;
         }
 
-        // --- 3. INIT (ROBUST) ---
-        function removeLoader() {
+        // --- 3. INIT (ROBUST LOADING) ---
+        let loaded = false;
+
+        function startSite() {
+            if(loaded) return;
+            loaded = true;
+            
             const l = document.getElementById("loader");
-            if(l && l.style.display !== "none") {
-                gsap.to(l, { opacity: 0, duration: 1.5, onComplete: () => {
+            const prank = document.getElementById("prank-stage");
+            
+            if(l) {
+                if(typeof gsap !== 'undefined') {
+                    gsap.to(l, { opacity: 0, duration: 1, onComplete: () => {
+                        l.style.display = "none";
+                        if(prank) {
+                            prank.classList.remove("hidden");
+                            prank.style.display = "flex";
+                        }
+                    }});
+                } else {
                     l.style.display = "none";
-                    document.getElementById("prank-stage").classList.remove("hidden");
-                }});
+                    if(prank) {
+                        prank.classList.remove("hidden");
+                        prank.style.display = "flex";
+                    }
+                }
             }
         }
 
-        window.onload = () => {
+        window.addEventListener('load', () => {
             initThree();
             initVideoLogic(); 
-            setTimeout(removeLoader, 1500); // Normal load time
-        };
+            setTimeout(startSite, 1000); 
+        });
+        
+        setTimeout(startSite, 3000); // Fail-safe
 
-        // SAFETY FALLBACK: If window.onload hangs, force open after 4s
-        setTimeout(removeLoader, 4000);
 
-        // --- 4. EXPANDED PRANK LOGIC ---
-        function checkContract() {
-            const cb = document.getElementById("contract-check"); const btn = document.getElementById("contract-btn");
-            if(cb.checked) { btn.classList.remove("disabled"); btn.style.borderColor = "#0f0"; btn.style.color = "#0f0"; } 
-            else { btn.classList.add("disabled"); btn.style.borderColor = "#333"; }
-        }
-
-        function runIQScan() {
-            gsap.to("#iq-bar", { width: "15%", duration: 1, ease: "none", onComplete: () => {
-                gsap.to("#iq-bar", { width: "15%", duration: 1, onComplete: () => { // Pause for effect
-                    gsap.to("#iq-bar", { width: "100%", backgroundColor: "#ef4444", duration: 0.5 }); // Turn red
-                    gsap.to("#iq-result", { opacity: 1, duration: 0.2 });
-                    const btn = document.getElementById("iq-btn");
-                    btn.style.opacity = "1";
-                    btn.style.pointerEvents = "auto";
-                    btn.innerText = "Accept Fate & Continue";
-                }});
-            }});
-        }
-
-        function checkTax() {
-            const input = document.getElementById("tax-input").value;
-            const msg = document.getElementById("tax-msg");
-            if (!input || input < 500) {
-                msg.innerText = "ERROR: Too cheap. Try again.";
-                gsap.fromTo("#tax-input", {x:-10}, {x:10, duration:0.1, repeat:5, yoyo:true, onComplete:()=>gsap.to("#tax-input",{x:0})});
-            } else {
-                nextPrank(6);
+        // --- 4. PRANK LOGIC (SECURITY CHECK) ---
+        
+        function forceTyping(el) {
+            const intended = "DRAMA QUEEN";
+            if (el.value.length > 0 && !intended.startsWith(el.value)) {
+                const idx = Math.min(el.value.length, intended.length);
+                el.value = intended.substring(0, idx);
             }
         }
 
-        function moveButton(btn) {
-            const maxX = window.innerWidth - 150;
-            const maxY = window.innerHeight - 50;
-            const randomX = Math.random() * maxX;
-            const randomY = Math.random() * maxY;
-            btn.style.position = 'fixed';
-            btn.style.left = randomX + 'px';
-            btn.style.top = randomY + 'px';
+        function failIQ() {
+            const msg = document.getElementById("iq-msg");
+            msg.innerText = "ERROR: INCORRECT. TRY AGAIN.";
+        }
+
+        function passIQ() {
+             const msg = document.getElementById("iq-msg");
+             msg.innerText = "WAIT... 2+2 is 4. ARE YOU SURE? (Just Kidding, Proceed)";
+             msg.style.color = "#4ade80"; 
+             setTimeout(() => nextPrank(7), 1500); // Pass to Finale
         }
 
         function nextPrank(num) {
             const curr = document.getElementById(`prank-${num-1}`); 
             const next = document.getElementById(`prank-${num}`);
+            
             if(num===2){ audio.volume=0; audio.play().then(()=>audio.pause()).catch(e=>{}); } 
-            gsap.to(curr, { opacity: 0, scale: 0.9, duration: 0.5, onComplete: () => {
-                curr.style.pointerEvents = "none"; 
-                if(next) {
-                    gsap.to(next, { opacity: 1, scale: 1, pointerEvents: "auto", duration: 0.5 });
-                    if(num === 3) setTimeout(runIQScan, 500); 
-                }
-            }});
+
+            if(typeof gsap !== 'undefined') {
+                gsap.to(curr, { opacity: 0, scale: 0.9, duration: 0.5, onComplete: () => {
+                    curr.style.pointerEvents = "none"; 
+                    curr.style.display = "none";
+                    if(next) {
+                        next.style.display = "flex";
+                        gsap.to(next, { opacity: 1, scale: 1, pointerEvents: "auto", duration: 0.5 });
+                        
+                        // --- SPECIFIC PRANK TRIGGERS ---
+                        if(num === 2) setTimeout(runAgeScan, 500);
+                        if(num === 3) setTimeout(runSassScan, 500);
+                        if(num === 4) setTimeout(runHeightScan, 500);
+                        if(num === 5) setTimeout(runBrainDownload, 500);
+                    }
+                }});
+            }
         }
 
-        function triggerPrankFail() {
-            document.getElementById("scanner-bar").classList.remove("hidden"); document.getElementById("scan-btn").innerText = "SCANNING...";
-            audio.volume=0; audio.play(); gsap.to(audio, {volume:0.5, duration:2}); musicPlaying=true;
+        function runAgeScan() {
+            gsap.to("#age-text", {opacity:1, duration:1, delay:1});
+            gsap.to("#status-text", {opacity:1, duration:1, delay:2});
+            gsap.to("#btn-2", {opacity:1, pointerEvents:"auto", duration:1, delay:3});
+        }
+
+        function runSassScan() {
+            gsap.to("#sass-bar", {width: "100%", duration: 2, ease: "power1.in"});
             setTimeout(() => {
-                document.getElementById("fingerprint-icon").style.color = "#ef4444"; 
-                document.getElementById("scanner-bar").style.background = "#ef4444";
-                document.getElementById("scan-status").innerText = "ACCESS DENIED"; document.getElementById("scan-status").style.color = "#ef4444";
-                setTimeout(() => {
-                    document.getElementById("glitch-overlay").classList.remove("hidden"); document.getElementById("glitch-overlay").classList.add("flex");
-                    document.getElementById("prank-stage").classList.add("glitch-active");
-                    setTimeout(() => { 
-                        document.getElementById("prank-stage").style.display = "none"; document.getElementById("intro-screen").classList.remove("hidden");
-                        gsap.fromTo("#intro-screen", { opacity: 0, scale: 1.1 }, { opacity: 1, scale: 1, duration: 2 });
-                    }, 3000);
-                }, 1500);
-            }, 2000);
+                gsap.to("#sass-msg", {opacity: 1, scale: 1.1, duration: 0.5, yoyo: true, repeat: 3});
+                gsap.to("#sass-sub", {opacity: 1, duration: 1, delay: 0.5});
+                gsap.to("#btn-3", {opacity: 1, pointerEvents: "auto", duration: 1, delay: 1});
+            }, 2100);
+        }
+
+        function runHeightScan() {
+             gsap.to("#height-bar", {height: "30%", duration: 2, ease: "elastic.out(1, 0.3)"});
+             setTimeout(() => {
+                 document.getElementById("height-result").innerText = "DETECTED: SMOL BEAN 🥔";
+                 gsap.to("#height-result", {opacity: 1, duration: 0.5});
+                 gsap.to("#btn-4", {opacity: 1, pointerEvents: "auto", duration: 1, delay: 0.5});
+             }, 2200);
+        }
+
+        function runBrainDownload() {
+            gsap.to("#dl-line-1", {opacity: 1, duration: 0.5});
+            gsap.to("#dl-line-2", {opacity: 1, duration: 0.5, delay: 1.5});
+            gsap.to("#dl-line-3", {opacity: 1, duration: 0.5, delay: 2.5});
+            gsap.to("#btn-5", {opacity: 1, pointerEvents: "auto", duration: 1, delay: 3});
+        }
+
+        function moveButton(btn) {
+            const maxX = window.innerWidth - 150;
+            const maxY = window.innerHeight - 150; 
+            const randomX = Math.random() * maxX;
+            const randomY = Math.random() * maxY;
+            btn.style.position = 'fixed';
+            if(typeof gsap !== 'undefined') gsap.to(btn, {left: randomX, top: randomY, duration: 0.2, ease: "power1.out"});
+            else { btn.style.left = randomX + 'px'; btn.style.top = randomY + 'px'; }
+        }
+
+        function triggerGlitch() {
+            document.body.classList.add("glitch-active");
+            const stage = document.getElementById("prank-stage");
+            gsap.to(stage, {opacity: 0, duration: 2, onComplete: () => {
+                document.body.classList.remove("glitch-active");
+                stage.style.display = "none";
+                document.getElementById("intro-screen").classList.remove("hidden");
+                gsap.fromTo("#intro-screen", { opacity: 0, scale: 1.1 }, { opacity: 1, scale: 1, duration: 2 });
+            }});
         }
 
         // --- 5. MAIN NAVIGATION ---
         let currentChap = 1; 
-        const totalChaps = 18; // UPDATED FOR NEW CHAPTERS
+        const totalChaps = 18;
         function startJourney() {
             gsap.to("#intro-screen", { opacity: 0, duration: 2, pointerEvents: "none", onComplete: () => {
                 document.getElementById("intro-screen").style.display = "none";
@@ -640,8 +604,11 @@
             }});
         }
         function nextChapter() {
-            const curr = document.getElementById(`chap-${currentChap}`); const next = document.getElementById(`chap-${currentChap+1}`);
+            const curr = document.getElementById(`chap-${currentChap}`); 
+            const next = document.getElementById(`chap-${currentChap+1}`);
+            
             gsap.to("#progress", { width: `${(currentChap/totalChaps)*100}%`, duration: 1.5 });
+            
             gsap.to(curr, { opacity: 0, scale: 0.95, filter: "blur(10px)", duration: 1, onComplete: () => {
                 curr.classList.remove("chapter-active"); curr.style.display = "none";
                 if(next) {
@@ -655,14 +622,13 @@
             gsap.fromTo(`#chap-${id} h2, #chap-${id} p`, { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 1.5, stagger: 0.2, delay: 0.5 });
             gsap.fromTo(`#chap-${id} .majestic-btn`, { width: 0, opacity: 0 }, { width: "auto", opacity: 1, duration: 1, delay: 2 });
             
-            // Special triggers based on chapter ID
             if(id===5) initHandDrag(); 
             if(id===6) loadGallery(); 
             if(id===7) initNumbers(); 
             if(id===8) { gsap.to("#hug-text", { opacity: 1, duration: 3, delay: 1 }); initCarousel(); } 
             if(id===9) initPuzzleGame(); 
             if(id===13) initFunnySurprise(); 
-            if(id===18) triggerFinale(); // UPDATED ID
+            if(id===18) triggerFinale();
         }
 
         // --- 6. CHAPTER LOGIC ---
@@ -695,7 +661,6 @@
         function revealConfession(el) { if(!el.classList.contains("revealed")) { el.classList.add("revealed"); gsap.to(el, { scale: 1.05, duration: 0.3, yoyo: true, repeat: 1 }); }}
         function initCarousel() { const w = ["Peace", "Home", "Comfort", "Happiness", "Forever"]; let i=0; setInterval(()=>{ i=(i+1)%w.length; gsap.to("#word-carousel", {opacity:0, duration:0.5, onComplete:()=>{document.getElementById("word-carousel").innerText=w[i]; gsap.to("#word-carousel", {opacity:1, duration:0.5});}}); }, 2500); }
         
-        // --- FIXED PUZZLE LOGIC ---
         function initPuzzleGame() { 
             const c=document.getElementById('puzzle-container'); 
             c.innerHTML=''; 
@@ -724,7 +689,6 @@
             } 
         }
 
-        // --- NEW FUNNY SURPRISE LOGIC ---
         const funnyMoments = [
             { src: "New folder (3)/funny1.jpg", text: "That face when I steal your food..." },
             { src: "New folder (3)/funny2.jpg", text: "Modeling? Or just tripping?" },
@@ -767,12 +731,9 @@
             gsap.to(modal, { opacity: 0, duration: 0.5 });
         }
 
-        // --- NEW LOGIC FOR LAUGHTER BUTTON ---
         function moveLaughNoBtn() {
             const btn = document.getElementById("laugh-no-btn");
-            // Set absolute to allow movement
             btn.style.position = 'absolute';
-            // Simple random position
             const x = (Math.random() - 0.5) * 500; 
             const y = (Math.random() - 0.5) * 300;
             gsap.to(btn, {x: x, y: y, duration: 0.2, ease: "power1.out"});
